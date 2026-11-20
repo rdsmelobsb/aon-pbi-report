@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "dc2b8c24e2c0533f5bd0",
+  "position": {
+    "x": 316.97070825685455,
+    "y": 1646.4997222280851,
+    "z": 14000,
+    "height": 67.471591884029152,
+    "width": 1141.6903574060723,
+    "tabOrder": 14000
+  },
+  "visual": {
+    "visualType": "textSlicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "REDES_FATO"
+                    }
+                  },
+                  "Property": "Promoted post name"
+                }
+              },
+              "queryRef": "REDES_FATO.Promoted post name",
+              "nativeQueryRef": "Filtre por Criativo:",
+              "displayName": "Filtre por Criativo:"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

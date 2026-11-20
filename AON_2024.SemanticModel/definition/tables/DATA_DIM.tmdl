@@ -1,0 +1,168 @@
+/// Dimensão de calendário contínua com atributos temporais de data, semana, mês e período.
+table DATA_DIM
+	lineageTag: 477c51b1-2273-4897-b965-66bcc7641b26
+	dataCategory: Time
+
+	column Data
+		dataType: dateTime
+		isKey
+		formatString: dd-mm
+		lineageTag: 6d40287d-850e-4fea-9903-984e98fce241
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Check
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 385daae6-a10c-4e8b-ba5c-4d7e41216090
+		summarizeBy: none
+		sourceColumn: Check
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano
+		dataType: string
+		lineageTag: 256e6ed2-772b-47d8-83b0-a7bd6b9c4125
+		summarizeBy: none
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID-PERÍODO
+		dataType: int64
+		formatString: 0
+		lineageTag: 795f8710-4869-40a9-9308-b9507ee18a6b
+		summarizeBy: sum
+		sourceColumn: ID-PERÍODO
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		dataType: string
+		lineageTag: 27a0c5fb-102d-4987-85a1-48a08840128b
+		summarizeBy: none
+		sourceColumn: Mês
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana Mes Ano'
+		dataType: string
+		lineageTag: 481c3d5e-17a9-479c-9abb-83ca48be94c8
+		summarizeBy: none
+		sourceColumn: Semana Mes Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana do Mês'
+		dataType: int64
+		formatString: 0
+		lineageTag: 75137382-ac4c-473f-9e43-135a5c99c4cc
+		summarizeBy: sum
+		sourceColumn: Semana do Mês
+
+		annotation SummarizationSetBy = Automatic
+
+	column Período
+		dataType: string
+		lineageTag: 8b918aaa-2169-4b01-93fd-1745de756d2e
+		summarizeBy: none
+		sourceColumn: Período
+		sortByColumn: ID-PERÍODO
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês.1'
+		dataType: int64
+		formatString: 0
+		lineageTag: a674863f-2b17-4a3b-abf5-7e961fb8b76d
+		summarizeBy: sum
+		sourceColumn: Mês.1
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Início da Semana'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 63d6b4ff-68fa-4e34-936f-03db243381d2
+		summarizeBy: none
+		sourceColumn: Início da Semana
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Fim da Semana'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 587633d8-fb83-4938-ba14-6f3a07965d64
+		summarizeBy: none
+		sourceColumn: Fim da Semana
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Semana
+		dataType: string
+		lineageTag: 6b5a3c1e-4d90-417f-818e-f8525919f0b3
+		summarizeBy: none
+		sourceColumn: Semana
+		sortByColumn: 'Início da Semana'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DATA_DIM-235369e7-35b3-428e-9a50-e3acb6cc8991 = m
+		mode: import
+		queryGroup: DIMENSÕES
+		source =
+				let
+				    // Definir a data inicial e o número de dias
+				    DataInicial = List.Min(REDES_FATO[Date]), // Substitua pela entrada do usuário
+				    NumDias = Duration.Days( Date.From(DateTime.FixedLocalNow()) - DataInicial ), // Substitua pelo número de dias desejado
+				
+				    // Criar uma lista de datas
+				    ListaDatas = List.Transform({0..(NumDias-1)}, each Date.AddDays(DataInicial, _)),
+				
+				    // Converter a lista em uma tabela
+				    Tabela = Table.FromList(ListaDatas, Splitter.SplitByNothing(), {"Data"}),
+				
+				    // Adicionar a coluna do mês
+				    TabelaComMes = Table.AddColumn(Tabela, "Mês", each Date.ToText([Data], "MMMM", "pt-BR")),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(TabelaComMes,{{"Data", type date}}),
+				    #"Ano Inserido" = Table.AddColumn(#"Tipo Alterado", "Ano", each Date.Year([Data]), Int64.Type),
+				    #"Coluna Mesclada Inserida" = Table.AddColumn(#"Ano Inserido", "Período", each Text.Combine({[Mês], Text.From([Ano], "pt-BR")}, " - "), type text),
+				    #"Linhas Agrupadas" = Table.Group(#"Coluna Mesclada Inserida", {"Período"}, {{"Dados", each _, type table [Data=nullable date, Mês=text, Ano=number, Período=text]}}),
+				    #"Índice Adicionado" = Table.AddIndexColumn(#"Linhas Agrupadas", "ID-PERÍODO", 1, 1, Int64.Type),
+				    #"Colunas Removidas" = Table.RemoveColumns(#"Índice Adicionado",{"Período"}),
+				    #"Dados Expandido" = Table.ExpandTableColumn(#"Colunas Removidas", "Dados", {"Data", "Mês", "Ano", "Período"}, {"Data", "Mês", "Ano", "Período"}),
+				    #"Linhas Classificadas" = Table.Sort(#"Dados Expandido",{{"Data", Order.Descending}}),
+				    #"Personalização Adicionada" = Table.AddColumn(#"Linhas Classificadas", "Check", each true),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Personalização Adicionada",{{"Check", type logical}}),
+				    #"Mês Inserido" = Table.AddColumn(#"Tipo Alterado1", "Mês.1", each Date.Month([Data]), Int64.Type),
+				    #"Tipo Alterado2" = Table.TransformColumnTypes(#"Mês Inserido",{{"Ano", type text}}),
+				    #"Semana do Mês Inserida" = Table.AddColumn(#"Tipo Alterado2", "Semana do Mês", each Date.WeekOfMonth([Data]), Int64.Type),
+				    #"Coluna Mesclada Inserida1" = Table.AddColumn(#"Semana do Mês Inserida", "Semana Mes Ano", each Text.Combine({Text.From([Semana do Mês], "pt-BR"), Text.From([Mês.1], "pt-BR"), [Ano]}, " - "), type text),
+				    #"Início da Semana Inserido" = Table.AddColumn(#"Coluna Mesclada Inserida1", "Início da Semana", each Date.StartOfWeek([Data]), type date),
+				    #"Fim da Semana Inserido" = Table.AddColumn(#"Início da Semana Inserido", "Fim da Semana", each Date.EndOfWeek([Data]), type date),
+				    #"Coluna Mesclada Inserida2" = Table.AddColumn(#"Fim da Semana Inserido", "Mesclado", each Text.Combine({Text.From([Início da Semana], "pt-BR"), " - ", Text.From([Fim da Semana], "pt-BR")}), type text),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Coluna Mesclada Inserida2","/2025","",Replacer.ReplaceText,{"Mesclado"}),
+				    #"Valor Substituído1" = Table.ReplaceValue(#"Valor Substituído","/2024","",Replacer.ReplaceText,{"Mesclado"}),
+				    #"Valor Substituído2" = Table.ReplaceValue(#"Valor Substituído1","/2026","",Replacer.ReplaceText,{"Mesclado"}),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Valor Substituído2",{{"Mesclado", "Semana"}})
+				in
+				    #"Colunas Renomeadas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

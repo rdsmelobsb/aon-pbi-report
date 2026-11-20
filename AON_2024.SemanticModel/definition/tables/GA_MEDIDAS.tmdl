@@ -1,0 +1,111 @@
+/// Tabela dedicada contendo todas as medidas DAX de análise de tráfego e eventos do GA4.
+table GA_MEDIDAS
+	lineageTag: acdf1496-f1eb-4fd9-9db1-d0290deede1e
+
+	/// Total de sessões registradas no Google Analytics 4 para as campanhas.
+	measure GA_Sessões = SUM(GA_FATO[Sessions])
+		formatString: #,0
+		displayFolder: Tráfego GA4
+		lineageTag: 4755b86a-882d-4e61-8429-e046fed75512
+
+	/// Total de usuários únicos ativos no site vindos das campanhas.
+	measure GA_Usuarios = SUM(GA_FATO[Users])
+		formatString: #,0
+		displayFolder: Tráfego GA4
+		lineageTag: a3d496c9-beb0-4401-ac9d-d8b2c43f60e6
+
+	/// Volume de novos visitantes que acessaram pela primeira vez.
+	measure GA_NovosUsuarios = SUM(GA_FATO[New users])
+		formatString: #,0
+		displayFolder: Tráfego GA4
+		lineageTag: 95f2b419-818a-40a7-94b2-0dec8e1ede06
+
+	/// Proporção de novos usuários em relação ao total de usuários.
+	measure 'GA_NovosUsuarios %' = DIVIDE([GA_NovosUsuarios],[GA_Usuarios])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Tráfego GA4
+		lineageTag: 97b255b0-e1d8-4125-ba13-8e9b6b9c9865
+
+	/// Duração média da sessão formatada em horas, minutos e segundos.
+	measure GA_TempoMedio = FORMAT(AVERAGE(GA_FATO[Avg. session length]),"hh:mm:ss")
+		displayFolder: Tráfego GA4
+		lineageTag: fe881734-4578-4d0c-ba8e-ebdef0e4e66c
+
+	/// Custo total de mídia dividido pelo total de eventos GA4 monitorados.
+	measure 'G_custo por evento' = DIVIDE([G_Custo],[GAE_Eventos])
+		formatString: "R$"#,0.00;-"R$"#,0.00;"R$"#,0.00
+		displayFolder: Eventos & Conversões
+		lineageTag: 7a70732b-4536-4599-8841-53098b08714e
+
+		annotation PBI_FormatHint = {"currencyCulture":"es-BR"}
+
+	/// Taxa de rejeição (sessões sem engajamento) das visitas vindas das campanhas.
+	measure 'GA_Tx de Rejeiçao' = DIVIDE(SUM(GA_FATO[Bounce]),[GA_Sessões])
+		formatString: 0%;-0%;0%
+		displayFolder: Tráfego GA4
+		lineageTag: 9e3d26b9-c163-4016-adfe-62869e80b87d
+
+		changedProperty = FormatString
+
+	/// Total de ocorrências de eventos nas sessões do GA4.
+	measure GAE_Eventos = SUM(GA_EVENTOS_FATO[Sessions])
+		formatString: #,0
+		displayFolder: Eventos & Conversões
+		lineageTag: 5e913fb1-a7fc-408f-bf35-e8546ad7f87b
+
+	/// Usuários que dispararam eventos específicos no GA4.
+	measure GAE_Usuarios = SUM(GA_EVENTOS_FATO[Users])
+		formatString: #,0
+		displayFolder: Eventos & Conversões
+		lineageTag: e8d467e4-7390-4430-83e9-8343037863cb
+
+	/// Novos usuários que realizaram eventos específicos no site.
+	measure GAE_NovosUsuarios = SUM(GA_EVENTOS_FATO[New users])
+		formatString: #,0
+		displayFolder: Eventos & Conversões
+		lineageTag: aa339813-b0ce-48d2-a115-e7352a101766
+
+	/// Tempo médio de sessão nos fluxos que contêm eventos monitorados.
+	measure GAE_TempoMedio = FORMAT(AVERAGE(GA_EVENTOS_FATO[Avg. session length]),"hh:mm:ss")
+		displayFolder: Eventos & Conversões
+		lineageTag: 8612c989-0cbd-485d-9f64-167066e2c26a
+
+	/// Média numérica em segundos do tempo de permanência no site.
+	measure 'Duração media das sessoes' = ```
+			AVERAGE('GA_FATO'[Avg. session length s]) 
+			```
+		displayFolder: Tráfego GA4
+		lineageTag: e4814d0d-9936-499f-be2b-a24dc1cf7687
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Tempo médio de sessão expresso numericamente no formato de tempo hh:mm:ss.
+	measure 'Duracao media das sessões hh/mm' =
+			
+			VAR V_SEGUNDOS_TOTAL = [Duração media das sessoes]
+			VAR V_HORA = INT(DIVIDE(V_SEGUNDOS_TOTAL, 3600))
+			VAR V_MINUTOS = INT(DIVIDE(V_SEGUNDOS_TOTAL - (V_HORA * 3600), 60))
+			VAR V_SEGUNDOS = MOD(V_SEGUNDOS_TOTAL, 60)
+			
+			RETURN V_HORA*10000 + V_MINUTOS*100 + V_SEGUNDOS
+		formatString: 00:00:00
+		displayFolder: Tráfego GA4
+		lineageTag: 64e8d62a-aec1-4292-9c43-76a0e3bab1c1
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition GA_MEDIDAS-fb15e1d3-d941-4f8a-a802-3348d469de60 = m
+		mode: import
+		queryGroup: MEDIDAS
+		source =
+				let
+				    Fonte = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Coluna 1" = _t]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Coluna 1", type text}}),
+				    #"Colunas Removidas" = Table.RemoveColumns(#"Tipo Alterado",{"Coluna 1"})
+				in
+				    #"Colunas Removidas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

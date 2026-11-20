@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "6d34b9ffe46a858f0359",
+  "position": {
+    "x": 317.8267091379268,
+    "y": 1676.601006693033,
+    "z": 13000,
+    "height": 67.471591884029152,
+    "width": 1141.6903574060723,
+    "tabOrder": 14000
+  },
+  "visual": {
+    "visualType": "textSlicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "REDES_FATO"
+                    }
+                  },
+                  "Property": "Campaign name"
+                }
+              },
+              "queryRef": "REDES_FATO.Campaign name",
+              "nativeQueryRef": "Filtre por campanha:",
+              "displayName": "Filtre por campanha:"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

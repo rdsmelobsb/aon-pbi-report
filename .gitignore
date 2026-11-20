@@ -1,0 +1,18 @@
+# Power BI Developer Mode (PBIP)
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+**/.pbi/editorSettings.json
+
+# Temporary scripts and caches
+__pycache__/
+*.pyc
+scratch/
+test_*.py
+inspect_*.py
+check_*.py
+
+# System & Editor files
+.DS_Store
+Thumbs.db
+*.tmp
+.vscode/

@@ -1,0 +1,30 @@
+/// Tabela de controle que registra a data e hora da última sincronização dos dados.
+table dm_atualizacao
+	lineageTag: ded72e63-bfc5-4c79-bd9c-4d292739fa44
+
+	column DataAtualizacao
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 751c738f-0389-48b9-b45d-803e99aa96b2
+		summarizeBy: none
+		sourceColumn: DataAtualizacao
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dm_atualizacao = m
+		mode: import
+		queryGroup: DIMENSÕES
+		source = ```
+				let
+				    Fonte = #table({"DataAtualizacao"}, 
+				    {{DateTimeZone.SwitchZone(DateTimeZone.LocalNow(), -3)}}
+				),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"DataAtualizacao", type datetimezone}})
+				in
+				    #"Tipo Alterado"
+				```
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

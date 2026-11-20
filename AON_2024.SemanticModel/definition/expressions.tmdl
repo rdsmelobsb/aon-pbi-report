@@ -1,0 +1,162 @@
+expression CONSOLIDADO =
+		let
+		    // Obtém os dados da API
+		    Fonte = Json.Document(Web.Contents("https://sheets.googleapis.com/v4/spreadsheets/1FvzidQKeIvV1f7HWI5OsN_dJLCOkzv1LW-32VHTyCak/values/CONSOLIDADO?key=AIzaSyBZ5XVts4aPnRgENl4rj5C8Lb2gg6Bu_LU")),
+		
+		    // Extrai os valores (lista de listas)
+		    ListaDeLinhas = Fonte[values],
+		
+		    // Descobre o número máximo de colunas na tabela
+		    NumeroColunas = List.Max(List.Transform(ListaDeLinhas, each List.Count(_))),
+		
+		    // Completa as linhas com valores vazios ("") para garantir o mesmo número de colunas
+		    LinhasAjustadas = List.Transform(ListaDeLinhas, each List.FirstN(List.Combine({_, List.Repeat({""}, NumeroColunas)}), NumeroColunas)),
+		
+		    // Converte a lista ajustada em uma tabela
+		    TabelaBruta = Table.FromRows(LinhasAjustadas),
+		
+		    // Usa a primeira linha como cabeçalho
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(TabelaBruta, [PromoteAllScalars=true]),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Plataforma", type text}, {"Placement", type text}, {"Date", type date}, {"Account", type text}, {"Campaign name", type text}, {"Campaign start date", type date}, {"Campaign end date", type date}, {"Ad set name", type text}, {"Promoted post name", type text}, {"Campaign objective", type text}, {"Promoted post image URL", type text}, {"Url Destino", type text}, {"Cost", Currency.Type}, {"Impressions", Int64.Type}, {"Link clicks", Int64.Type}, {"Post reactions", Percentage.Type}, {"Post comments", Int64.Type}, {"Post shares", Int64.Type}, {"Video play actions", Int64.Type}, {"Video watches at 25%", Int64.Type}, {"Video watches at 50%", Int64.Type}, {"Video watches at 75%", Int64.Type}, {"Video watches at 100%", Int64.Type}, {"SEED", type text}}),
+		    #"Linhas Filtradas" = Table.SelectRows(#"Tipo Alterado", each ([Cost] <> 0))
+		in
+		    #"Linhas Filtradas"
+	lineageTag: 7f443476-e8a7-4414-beb7-30150db330d5
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression PLANEJADO =
+		let
+		    // Obtém os dados da API
+		    Fonte = Json.Document(Web.Contents("https://sheets.googleapis.com/v4/spreadsheets/1FvzidQKeIvV1f7HWI5OsN_dJLCOkzv1LW-32VHTyCak/values/Planejado?key=AIzaSyBZ5XVts4aPnRgENl4rj5C8Lb2gg6Bu_LU")),
+		
+		    // Extrai os valores (lista de listas)
+		    ListaDeLinhas = Fonte[values],
+		
+		    // Descobre o número máximo de colunas na tabela
+		    NumeroColunas = List.Max(List.Transform(ListaDeLinhas, each List.Count(_))),
+		
+		    // Completa as linhas com valores vazios ("") para garantir o mesmo número de colunas
+		    LinhasAjustadas = List.Transform(ListaDeLinhas, each List.FirstN(List.Combine({_, List.Repeat({""}, NumeroColunas)}), NumeroColunas)),
+		
+		    // Converte a lista ajustada em uma tabela
+		    TabelaBruta = Table.FromRows(LinhasAjustadas),
+		
+		    // Usa a primeira linha como cabeçalho
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(TabelaBruta, [PromoteAllScalars=true]),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Ano", Int64.Type}, {"Estado", type text}, {"Mês", type text}, {"Campanha", type text}, {"Veículo", type text}, {"Seed", type text}, {"Formato", type text}, {"Segmentação", type text}, {"Tipo de Compra", type text}, {"Data de Início", type date}, {"Data de Fim", type date}, {"Planejado", Int64.Type}, {"Investimento", type number}, {"Resultado", type number}, {"Filtro", type text}, {"Mascara_Filtro", type text}}),
+		    #"Linhas Classificadas" = Table.Sort(#"Tipo Alterado",{{"Data de Início", Order.Descending}})
+		in
+		    #"Linhas Classificadas"
+	lineageTag: b98b4e30-3f87-4b81-839f-16fce6035ce3
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression Validação =
+		//(texto as text) =>
+		
+		(texto as nullable text) as logical =>
+		let
+		    Fonte = if texto = null or texto = "" then false else Text.PositionOfAny(texto, {"0".."9"}) >= 0
+		in
+		    Fonte
+	lineageTag: c22237c6-f0dd-4084-bb76-fae407618b1c
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Function
+
+expression GA4 =
+		let
+		    // Obtém os dados da API
+		    Fonte = Json.Document(Web.Contents("https://sheets.googleapis.com/v4/spreadsheets/1C6nbvHryLTFJ3kzcwWDvrvV5sZrnnA2rwKh7xS3ILaQ/values/GA4!A1%3AJ?key=AIzaSyBZ5XVts4aPnRgENl4rj5C8Lb2gg6Bu_LU")),
+		
+		    // Extrai os valores (lista de listas)
+		    ListaDeLinhas = Fonte[values],
+		
+		    // Descobre o número máximo de colunas na tabela
+		    NumeroColunas = List.Max(List.Transform(ListaDeLinhas, each List.Count(_))),
+		
+		    // Completa as linhas com valores vazios ("") para garantir o mesmo número de colunas
+		    LinhasAjustadas = List.Transform(ListaDeLinhas, each List.FirstN(List.Combine({_, List.Repeat({""}, NumeroColunas)}), NumeroColunas)),
+		
+		    // Converte a lista ajustada em uma tabela
+		    TabelaBruta = Table.FromRows(LinhasAjustadas),
+		
+		    // Usa a primeira linha como cabeçalho
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(TabelaBruta, [PromoteAllScalars=true]),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Date", type date}, {"Campaign", type text}, {"Source & medium", type text}, {"Ad content", type text}, {"Sessions", Int64.Type}, {"Users", Int64.Type}, {"New users", Int64.Type}, {"Bounce", Int64.Type}, {"Avg. session length s", type number}, {"Avg. session length", type time}})
+		in
+		    #"Tipo Alterado"
+	lineageTag: acc265ab-10f8-49c3-8754-c3bd72e101b0
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression GA4-EVENTOS =
+		let
+		    // Obtém os dados da API
+		    Fonte = Json.Document(Web.Contents("https://sheets.googleapis.com/v4/spreadsheets/1C6nbvHryLTFJ3kzcwWDvrvV5sZrnnA2rwKh7xS3ILaQ/values/GA-Eventos!A1%3AJ?key=AIzaSyBZ5XVts4aPnRgENl4rj5C8Lb2gg6Bu_LU")),
+		
+		    // Extrai os valores (lista de listas)
+		    ListaDeLinhas = Fonte[values],
+		
+		    // Descobre o número máximo de colunas na tabela
+		    NumeroColunas = List.Max(List.Transform(ListaDeLinhas, each List.Count(_))),
+		
+		    // Completa as linhas com valores vazios ("") para garantir o mesmo número de colunas
+		    LinhasAjustadas = List.Transform(ListaDeLinhas, each List.FirstN(List.Combine({_, List.Repeat({""}, NumeroColunas)}), NumeroColunas)),
+		
+		    // Converte a lista ajustada em uma tabela
+		    TabelaBruta = Table.FromRows(LinhasAjustadas),
+		
+		    // Usa a primeira linha como cabeçalho
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(TabelaBruta, [PromoteAllScalars=true]),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Date", type date}, {"Campaign", type text}, {"Source & medium", type text}, {"Ad content", type text}, {"Event category", type text}, {"Sessions", Int64.Type}, {"Users", Int64.Type}, {"New users", Int64.Type}, {"Average session length s", type number}, {"Avg. session length", type time}})
+		in
+		    #"Tipo Alterado"
+	lineageTag: 2cb46e70-bf53-42dc-a768-082581a983ac
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression REDES_FATO-STAGE =
+		let
+		    Fonte = CONSOLIDADO,
+		    #"Linhas Filtradas" = Table.SelectRows(Fonte, each ([SEED] <> "")),
+		    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Linhas Filtradas",{{"Video watches at 100%", Int64.Type}}),
+		    #"Coluna Duplicada" = Table.DuplicateColumn(#"Tipo Alterado1", "Date", "Date - Copiar"),
+		    #"Coluna Duplicada1" = Table.DuplicateColumn(#"Coluna Duplicada", "SEED", "SEED - Copiar"),
+		    #"Nome do Mês Extraído" = Table.TransformColumns(#"Coluna Duplicada1", {{"Date - Copiar", each Date.MonthName(_), type text}}),
+		    #"Colocar Cada Palavra Em Maiúscula" = Table.TransformColumns(#"Nome do Mês Extraído",{{"Date - Copiar", Text.Proper, type text}}),
+		    #"Colunas Mescladas" = Table.CombineColumns(#"Colocar Cada Palavra Em Maiúscula",{"Date - Copiar", "SEED - Copiar"},Combiner.CombineTextByDelimiter("|", QuoteStyle.None),"Id Seed"),
+		    #"Linhas Filtradas2" = Table.SelectRows(#"Colunas Mescladas", each not Text.Contains([Campaign name], "HISTÓRIAS EXPORTADORAS |")),
+		    #"Coluna Duplicada2" = Table.DuplicateColumn(#"Linhas Filtradas2", "Promoted post name", "Promoted post name - Copiar"),
+		    #"Texto Extraído Antes do Delimitador" = Table.TransformColumns(#"Coluna Duplicada2", {{"Promoted post name - Copiar", each Text.BeforeDelimiter(_, "(naugm"), type text}}),
+		    #"Dividir Coluna por Delimitador" = Table.SplitColumn(#"Texto Extraído Antes do Delimitador", "Promoted post name - Copiar", Splitter.SplitTextByEachDelimiter({"_"}, QuoteStyle.Csv, true), {"Promoted post name - Copiar.1", "Promoted post name - Copiar.2"}),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Dividir Coluna por Delimitador",{{"Promoted post name - Copiar.1", type text}, {"Promoted post name - Copiar.2", type text}}),
+		    Personalizar1 = #"Tipo Alterado",
+		    #"Função Personalizada Invocada" = Table.AddColumn(Personalizar1, "Validação", each Validação([#"Promoted post name - Copiar.2"])),
+		    #"Tipo Alterado2" = Table.TransformColumnTypes(#"Função Personalizada Invocada",{{"Validação", type logical}}),
+		    #"Coluna Mesclada Inserida" = Table.AddColumn(#"Tipo Alterado2", "Mesclado", each if [Validação] = false then Text.Combine({[#"Promoted post name - Copiar.1"], [#"Promoted post name - Copiar.2"]}, " ") else null, type text),
+		    #"Coluna Mesclada Inserida1" = Table.AddColumn(#"Coluna Mesclada Inserida", "Mesclado.1", each if [Mesclado] = null then Text.Combine({[#"Promoted post name - Copiar.1"], [Mesclado]}, "") else null, type text),
+		    #"Colunas Mescladas1" = Table.CombineColumns(#"Coluna Mesclada Inserida1",{"Mesclado", "Mesclado.1"},Combiner.CombineTextByDelimiter("", QuoteStyle.None),"Máscara Criativo"),
+		    #"Colunas Removidas" = Table.RemoveColumns(#"Colunas Mescladas1",{"Promoted post name - Copiar.1", "Promoted post name - Copiar.2", "Validação"}),
+		    #"Colocar Cada Palavra Em Maiúscula1" = Table.TransformColumns(#"Colunas Removidas",{{"Plataforma", Text.Proper, type text}}),
+		    #"Texto Aparado" = Table.TransformColumns(#"Colocar Cada Palavra Em Maiúscula1",{{"Plataforma", Text.Trim, type text}}),
+		    #"Texto Limpo" = Table.TransformColumns(#"Texto Aparado",{{"Plataforma", Text.Clean, type text}}),
+		    #"Coluna Mesclada Inserida2" = Table.AddColumn(#"Texto Limpo", "ID-URL", each Text.Combine({[Campaign name], [Ad set name]}, ""), type text)
+		in
+		    #"Coluna Mesclada Inserida2"
+	lineageTag: 80832837-e717-4641-902e-9c8bd618d965
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

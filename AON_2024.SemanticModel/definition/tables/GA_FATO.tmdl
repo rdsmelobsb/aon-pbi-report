@@ -1,0 +1,131 @@
+/// Fato de tráfego receptivo do GA4 (sessões, usuários, novos usuários e tempo de permanência).
+table GA_FATO
+	lineageTag: 31539e57-c77c-42b0-b511-fee93d2ba918
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 630ed02f-d410-4778-926f-97d4d38f5477
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Source & medium'
+		dataType: string
+		lineageTag: 16506635-949d-4fdc-ab6c-a1bf5eb4dac5
+		summarizeBy: none
+		sourceColumn: Source & medium
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campaign
+		dataType: string
+		lineageTag: d8d62dde-2b94-4d0f-a297-a80f76f3cd47
+		summarizeBy: none
+		sourceColumn: Campaign
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ad content'
+		dataType: string
+		lineageTag: 57b9cd99-eb64-4671-8a6f-8089ded454ac
+		summarizeBy: none
+		sourceColumn: Ad content
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sessions
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0aa0bca2-a451-4f94-ba7b-1edaa2a6e771
+		summarizeBy: sum
+		sourceColumn: Sessions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Users
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9966cd6a-05af-4b61-b4db-efe52a4c4ae9
+		summarizeBy: sum
+		sourceColumn: Users
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'New users'
+		dataType: int64
+		formatString: 0
+		lineageTag: 59e973ca-edce-4980-b5ce-f12eb826e23a
+		summarizeBy: sum
+		sourceColumn: New users
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Avg. session length'
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: ade3e0ac-c5fa-4fcc-94d5-a14beaa885b2
+		summarizeBy: none
+		sourceColumn: Avg. session length
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column Bounce
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a8c0df29-1f1c-41cc-8340-487dba18debc
+		summarizeBy: sum
+		sourceColumn: Bounce
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Avg. session length s'
+		dataType: double
+		lineageTag: e09ccfc9-328a-4b09-8227-afa895408d8a
+		summarizeBy: sum
+		sourceColumn: Avg. session length s
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IDUNICO
+		dataType: string
+		isHidden
+		lineageTag: 7e9efe83-aa5f-4e9e-a350-02329c84b719
+		summarizeBy: none
+		sourceColumn: IDUNICO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GA_FATO-d75182b4-b129-437c-970f-b55f0137c3bb = m
+		mode: import
+		queryGroup: FATOS
+		source =
+				let
+				    Fonte = GA4,
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Date", type date}, {"Source & medium", type text}, {"Campaign", type text}, {"Ad content", type text}, {"Sessions", Int64.Type}, {"Users", Int64.Type}, {"New users", Int64.Type}, {"Avg. session length", type time}}),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Tipo Alterado", each ([Date] <> null)),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Linhas Filtradas",{{"Bounce", Int64.Type}}),
+				    #"Linhas Filtradas1" = Table.SelectRows(#"Tipo Alterado1", each [Date] >= #date(2024, 5, 14)),
+				    #"Texto Inserido Após o Delimitador" = Table.AddColumn(#"Linhas Filtradas1", "ID", each Text.AfterDelimiter([Ad content], "NS"), type text),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Texto Inserido Após o Delimitador","B","NSB",Replacer.ReplaceText,{"ID"}),
+				    #"Coluna Duplicada" = Table.DuplicateColumn(#"Valor Substituído", "Date", "Date - Copiar"),
+				    #"Nome do Mês Extraído" = Table.TransformColumns(#"Coluna Duplicada", {{"Date - Copiar", each Date.MonthName(_), type text}}),
+				    #"Colocar Cada Palavra Em Maiúscula" = Table.TransformColumns(#"Nome do Mês Extraído",{{"Date - Copiar", Text.Proper, type text}}),
+				    #"Colunas Mescladas" = Table.CombineColumns(#"Colocar Cada Palavra Em Maiúscula",{"Date - Copiar", "ID"},Combiner.CombineTextByDelimiter("|", QuoteStyle.None),"IDUNICO")
+				in
+				    #"Colunas Mescladas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

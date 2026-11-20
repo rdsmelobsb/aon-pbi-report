@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "c4c40bf3de66ad648118",
+  "position": {
+    "x": 318.42415526455915,
+    "y": 392.47628439585196,
+    "z": 7000,
+    "height": 271.03079262053177,
+    "width": 537.61845749318593,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "REDES_VEICULOS_DIM"
+                    }
+                  },
+                  "Property": "Veículo"
+                }
+              },
+              "queryRef": "REDES_VEICULOS_DIM.Veículo",
+              "nativeQueryRef": "Veículo",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "REDES_MEDIDAS"
+                    }
+                  },
+                  "Property": "rd_custo"
+                }
+              },
+              "queryRef": "REDES_MEDIDAS.rd_custo",
+              "nativeQueryRef": "Investimento",
+              "displayName": "Investimento"
+            }
+          ],
+          "fieldParameters": [
+            {
+              "parameterExpr": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rd_LinhasGrafico"
+                    }
+                  },
+                  "Property": "Indicadores_Gerais"
+                }
+              },
+              "index": 0,
+              "length": 1
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "REDES_MEDIDAS"
+                  }
+                },
+                "Property": "rd_custo"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

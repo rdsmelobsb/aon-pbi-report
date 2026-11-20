@@ -1,0 +1,165 @@
+{
+  "name": "City Park Modernized",
+  "dataColors": [
+    "#0F1934",
+    "#457DFF",
+    "#00B867",
+    "#FFA200",
+    "#1443F6",
+    "#EE9E64",
+    "#00D576",
+    "#64748B"
+  ],
+  "good": "#00B867",
+  "neutral": "#FFA200",
+  "bad": "#D64554",
+  "maximum": "#457DFF",
+  "center": "#FFA200",
+  "minimum": "#E2E8F0",
+  "null": "#94A3B8",
+  "background": "#FFFFFF",
+  "foreground": "#0F1934",
+  "tableAccent": "#0F1934",
+  "textClasses": {
+    "callout": {
+      "fontSize": 26,
+      "fontFace": "Segoe UI Variable, Segoe UI, sans-serif",
+      "color": "#1E293B"
+    },
+    "title": {
+      "fontSize": 14,
+      "fontFace": "Segoe UI Variable, Segoe UI, sans-serif",
+      "color": "#0F1934"
+    },
+    "header": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI Semibold, Segoe UI",
+      "color": "#0F1934"
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI Variable, Segoe UI, sans-serif",
+      "color": "#64748B"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#E2E8F0"
+              }
+            },
+            "radius": 8
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ],
+        "padding": [
+          {
+            "top": 6,
+            "bottom": 6,
+            "left": 6,
+            "right": 6
+          }
+        ]
+      }
+    },
+    "tableEx": {
+      "*": {
+        "columnHeaders": [
+          {
+            "autoSizeColumnWidth": true,
+            "columnAdjustment": "growToFit",
+            "backColor": {
+              "solid": {
+                "color": "#F1F5F9"
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": "#0F1934"
+              }
+            },
+            "bold": true
+          }
+        ],
+        "values": [
+          {
+            "backColorPrimary": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": "#F8FAFC"
+              }
+            },
+            "fontColorPrimary": {
+              "solid": {
+                "color": "#1E293B"
+              }
+            },
+            "fontColorSecondary": {
+              "solid": {
+                "color": "#1E293B"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "pivotTable": {
+      "*": {
+        "columnHeaders": [
+          {
+            "autoSizeColumnWidth": true,
+            "columnAdjustment": "growToFit",
+            "backColor": {
+              "solid": {
+                "color": "#F1F5F9"
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": "#0F1934"
+              }
+            },
+            "bold": true
+          }
+        ],
+        "values": [
+          {
+            "backColorPrimary": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": "#F8FAFC"
+              }
+            },
+            "fontColorPrimary": {
+              "solid": {
+                "color": "#1E293B"
+              }
+            },
+            "fontColorSecondary": {
+              "solid": {
+                "color": "#1E293B"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

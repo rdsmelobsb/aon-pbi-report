@@ -1,0 +1,130 @@
+/// Fato contendo o registro de ocorrência de eventos e conversões on-site do Google Analytics 4.
+table GA_EVENTOS_FATO
+	lineageTag: c48a1db6-2946-425a-82cb-e23ae90c7886
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ba11c7aa-1119-4ba5-9105-75758838c224
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Campaign
+		dataType: string
+		lineageTag: 5d48fdfe-57b4-4850-9743-af6008790c7b
+		summarizeBy: none
+		sourceColumn: Campaign
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Source & medium'
+		dataType: string
+		lineageTag: e6b14360-c91f-4146-98fb-0a931c5a0f3b
+		summarizeBy: none
+		sourceColumn: Source & medium
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ad content'
+		dataType: string
+		lineageTag: fbbd7e00-d0ce-46bd-a6c5-d8a47a7f324c
+		summarizeBy: none
+		sourceColumn: Ad content
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Event category'
+		dataType: string
+		lineageTag: 593eb925-5ed6-4e45-81c9-82112329ed10
+		summarizeBy: none
+		sourceColumn: Event category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sessions
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9e548399-38ea-4b6c-9e0d-8b161f272353
+		summarizeBy: sum
+		sourceColumn: Sessions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Users
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7061d6fb-3e62-4005-995c-36af65831805
+		summarizeBy: sum
+		sourceColumn: Users
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'New users'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0faa8a6a-fde8-4089-98b2-65efc8d642d2
+		summarizeBy: sum
+		sourceColumn: New users
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Average session length s'
+		dataType: double
+		lineageTag: 29d5edb9-56fc-4cd9-8c17-bd46a7bf6a2c
+		summarizeBy: sum
+		sourceColumn: Average session length s
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Avg. session length'
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: bbf01fed-ca27-4123-a6a1-d1d0f285ba7a
+		summarizeBy: none
+		sourceColumn: Avg. session length
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column IDUNICO
+		dataType: string
+		isHidden
+		lineageTag: 0b425a77-c578-4bf5-9eeb-92ab3c4c4790
+		summarizeBy: none
+		sourceColumn: IDUNICO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GA_EVENTOS_FATO = m
+		mode: import
+		queryGroup: FATOS
+		source =
+				let
+				    Fonte = #"GA4-EVENTOS",
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Date", type date}, {"Source & medium", type text}, {"Campaign", type text}, {"Ad content", type text}, {"Sessions", Int64.Type}, {"Users", Int64.Type}, {"New users", Int64.Type}, {"Avg. session length", type time}}),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Tipo Alterado","product","Botão de Cursos",Replacer.ReplaceText,{"Event category"}),
+				    #"Valor Substituído1" = Table.ReplaceValue(#"Valor Substituído","menu","Botão do Menu",Replacer.ReplaceText,{"Event category"}),
+				    #"Valor Substituído2" = Table.ReplaceValue(#"Valor Substituído1","order_placed","Compra de Curso",Replacer.ReplaceText,{"Event category"}),
+				    #"Texto Inserido Após o Delimitador" = Table.AddColumn(#"Valor Substituído2", "ID", each Text.AfterDelimiter([Ad content], "NS"), type text),
+				    #"Valor Substituído3" = Table.ReplaceValue(#"Texto Inserido Após o Delimitador","B","NSB",Replacer.ReplaceText,{"ID"}),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Valor Substituído3", each ([Date] <> null)),
+				    #"Coluna Duplicada" = Table.DuplicateColumn(#"Linhas Filtradas", "Date", "Date - Copiar"),
+				    #"Nome do Mês Extraído" = Table.TransformColumns(#"Coluna Duplicada", {{"Date - Copiar", each Date.MonthName(_), type text}}),
+				    #"Colocar Cada Palavra Em Maiúscula" = Table.TransformColumns(#"Nome do Mês Extraído",{{"Date - Copiar", Text.Proper, type text}}),
+				    #"Colunas Mescladas" = Table.CombineColumns(#"Colocar Cada Palavra Em Maiúscula",{"Date - Copiar", "ID"},Combiner.CombineTextByDelimiter("|", QuoteStyle.None),"IDUNICO")
+				in
+				    #"Colunas Mescladas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

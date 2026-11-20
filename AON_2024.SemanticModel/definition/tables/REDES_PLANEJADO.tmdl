@@ -1,0 +1,170 @@
+/// Fato com o planejamento orçamentário e metas estipuladas por veículo, formato e mês.
+table REDES_PLANEJADO
+	lineageTag: 2163b461-c7b7-49ef-9390-61e77e5587fb
+
+	column Veículo
+		dataType: string
+		lineageTag: eb176635-70d9-4387-a7dc-a0567463e279
+		summarizeBy: none
+		sourceColumn: Veículo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Formato
+		dataType: string
+		lineageTag: 807316df-ca47-4ffc-a054-9e54bd53c0cd
+		summarizeBy: none
+		sourceColumn: Formato
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Compra'
+		dataType: string
+		lineageTag: 617b6eee-c67f-431e-95fe-813eba9f573a
+		summarizeBy: none
+		sourceColumn: Tipo de Compra
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Início'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a71a02ae-da28-41d4-b495-61c517e0f06e
+		summarizeBy: none
+		sourceColumn: Data de Início
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data de Fim'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c1a403cd-ce58-4746-a734-9f5dbf566890
+		summarizeBy: none
+		sourceColumn: Data de Fim
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Planejado
+		dataType: int64
+		formatString: 0
+		lineageTag: b202927c-4992-49e3-bf5f-33833f8f6c51
+		summarizeBy: sum
+		sourceColumn: Planejado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Investimento
+		dataType: double
+		formatString: "R$"\ #,0.0;-"R$"\ #,0.0;"R$"\ #,0.0
+		lineageTag: 9c9b0c2c-4924-4e90-b4c5-b22525858955
+		summarizeBy: sum
+		sourceColumn: Investimento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Resultado
+		dataType: double
+		lineageTag: babcc6dd-e5d3-456f-bf58-ae1f68d2bf59
+		summarizeBy: sum
+		sourceColumn: Resultado
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Mês
+		dataType: string
+		lineageTag: 39feca8e-7b90-42b9-84bf-6100a5c392f4
+		summarizeBy: none
+		sourceColumn: Mês
+
+		annotation SummarizationSetBy = Automatic
+
+	column Seed
+		dataType: string
+		lineageTag: d5ce2a17-e22c-4f64-87ee-4260c540f564
+		summarizeBy: none
+		sourceColumn: Seed
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Id Seed'
+		dataType: string
+		lineageTag: d0b79b8b-755c-4d5a-8307-ba127e52b382
+		summarizeBy: none
+		sourceColumn: Id Seed
+
+		annotation SummarizationSetBy = Automatic
+
+	column Estado
+		dataType: string
+		lineageTag: cd5ee9c5-c0a4-413c-9e5d-d80bdf0bf38a
+		summarizeBy: none
+		sourceColumn: Estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segmentação
+		dataType: string
+		lineageTag: 713f9789-0878-4365-9f44-2f3a53fa0faf
+		summarizeBy: none
+		sourceColumn: Segmentação
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campanha
+		dataType: string
+		lineageTag: f6322f64-811d-4192-9279-7d89ca21e7d6
+		summarizeBy: none
+		sourceColumn: Campanha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Filtro
+		dataType: string
+		lineageTag: 6a39c551-d237-4cfe-ba05-d0019f72d033
+		summarizeBy: none
+		sourceColumn: Filtro
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: b03b4b5e-6cff-4143-a5b2-216460e32f4a
+		summarizeBy: sum
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mascara_Filtro
+		dataType: string
+		lineageTag: 2469ff36-ff94-455a-b30e-4589ee8943fc
+		summarizeBy: none
+		sourceColumn: Mascara_Filtro
+
+		annotation SummarizationSetBy = Automatic
+
+	partition REDES_PLANEJADO-b1a7818a-bfbd-4237-a989-781dd4746bd6 = m
+		mode: import
+		queryGroup: DIMENSÕES
+		source =
+				let
+				    Fonte = PLANEJADO,
+				    #"Coluna Duplicada" = Table.DuplicateColumn(Fonte, "Seed", "Seed - Copiar"),
+				    #"Coluna Duplicada1" = Table.DuplicateColumn(#"Coluna Duplicada", "Mês", "Mês - Copiar"),
+				    #"Colunas Mescladas" = Table.CombineColumns(#"Coluna Duplicada1",{"Mês - Copiar", "Seed - Copiar"},Combiner.CombineTextByDelimiter("|", QuoteStyle.None),"Id Seed"),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Colunas Mescladas", each ([Mês] <> "") and ([Seed] <> "NSB2024010180880003" and [Seed] <> "NSB2024010180880008" and [Seed] <> "NSB2024010194240001" and [Seed] <> "NSB2024010194240006"))
+				in
+				    #"Linhas Filtradas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

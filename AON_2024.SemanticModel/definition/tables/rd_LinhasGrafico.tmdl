@@ -1,0 +1,63 @@
+/// Tabela de parâmetros para seleção dinâmica de indicadores em visuais de tendência.
+table rd_LinhasGrafico
+	lineageTag: 9b887586-be59-4e85-9f36-faeb3a9cb301
+
+	column Indicadores_Gerais
+		lineageTag: ba2874fe-613c-475c-9bdd-acc06f9cd3ee
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Redes_Colunas Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'Redes_Colunas Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Redes_Colunas Campos'
+		isHidden
+		lineageTag: def5978f-8cc5-4d8f-b00f-50697d85bbb4
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Redes_Colunas Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Redes_Colunas Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: b5da1e40-69e4-41a0-b7ac-b66f3f0cdd3d
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition rd_LinhasGrafico = calculated
+		mode: import
+		source =
+				{
+				    ("Investimento", NAMEOF('REDES_MEDIDAS'[rd_custo]), 0),
+				    ("Impressões", NAMEOF('REDES_MEDIDAS'[rd_impressões]), 1),
+				    ("Views", NAMEOF('REDES_MEDIDAS'[rd_views]), 2),
+				    ("Views 100%", NAMEOF('REDES_MEDIDAS'[rd_video100]), 3),
+				    ("Cliques", NAMEOF('REDES_MEDIDAS'[rd_cliques]), 4),
+				    ("CPM", NAMEOF('REDES_MEDIDAS'[rd_CPM]), 5),
+				    ("CPV", NAMEOF('REDES_MEDIDAS'[rd_CPV]), 6),
+				    ("CPC", NAMEOF('REDES_MEDIDAS'[rd_cpc]), 7),
+				    ("CPV 100%", NAMEOF('REDES_MEDIDAS'[rd_CPV100]), 8),
+				    ("CTR", NAMEOF('REDES_MEDIDAS'[rd_ctr]), 9),
+				    ("VTR", NAMEOF('REDES_MEDIDAS'[rd_txvisualizacao]), 10),
+				    ("VTR 100%", NAMEOF('REDES_MEDIDAS'[VTR100%]), 11),
+				    ("Sessões", NAMEOF('GA_MEDIDAS'[GA_Sessões]), 12),
+				    ("Novos Usuários", NAMEOF('GA_MEDIDAS'[GA_NovosUsuarios]), 13),
+				    ("Duração Média das Sessões", NAMEOF('GA_MEDIDAS'[Duracao media das sessões hh/mm]), 14),
+				    ("Taxa de Rejeição", NAMEOF('GA_MEDIDAS'[GA_Tx de Rejeiçao]), 15)
+				}
+
+	annotation PBI_Id = 26125530bfd44248bb07a0e317ecdf2e
+

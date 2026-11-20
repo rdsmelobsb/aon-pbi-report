@@ -1,0 +1,314 @@
+/// Fato de performance das redes sociais (Meta, Google, TikTok e LinkedIn) com custos, cliques e visualizações.
+table REDES_FATO
+	lineageTag: 4d28659e-ba21-4e00-a241-802a6f5fcccf
+
+	column Plataforma
+		dataType: string
+		lineageTag: 32970ee7-ddb4-4843-81e0-6830e9a15ab4
+		summarizeBy: none
+		sourceColumn: Plataforma
+
+		annotation SummarizationSetBy = Automatic
+
+	column Placement
+		dataType: string
+		lineageTag: 15df2c91-5b89-4b9d-99cb-25397c7f1ce7
+		summarizeBy: none
+		sourceColumn: Placement
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: dd/mm
+		lineageTag: f5271f53-3289-4a88-93ec-6ae1aa1db708
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Account
+		dataType: string
+		lineageTag: 5358cf5a-8fa2-4f51-9dd3-c6806ba92bc7
+		summarizeBy: none
+		sourceColumn: Account
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Campaign name'
+		dataType: string
+		lineageTag: 8f1b3b2b-179b-46d5-9e83-7c291c3e7cfa
+		summarizeBy: none
+		sourceColumn: Campaign name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ad set name'
+		dataType: string
+		lineageTag: cff880ae-ca38-40de-9b3e-9e128c6fdd0f
+		summarizeBy: none
+		sourceColumn: Ad set name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Promoted post name'
+		dataType: string
+		lineageTag: 031c5655-abc0-48d5-b266-bc62eed95e2f
+		summarizeBy: none
+		sourceColumn: Promoted post name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Campaign objective'
+		dataType: string
+		lineageTag: b25a2053-38aa-4f65-8d63-f6f595c6efc2
+		summarizeBy: none
+		sourceColumn: Campaign objective
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Promoted post image URL'
+		dataType: string
+		lineageTag: 17d90b9a-5a48-4c99-9baf-8878d51f52e2
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: Promoted post image URL
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Url Destino'
+		dataType: string
+		lineageTag: 54ab5b68-a158-42b8-8a23-d5dc7e145d3f
+		summarizeBy: none
+		sourceColumn: Url Destino
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cost
+		dataType: decimal
+		isHidden
+		formatString: "R$"\ #,0.0;-"R$"\ #,0.0;"R$"\ #,0.0
+		lineageTag: e3376477-778c-434d-bb25-b475efeefc6a
+		summarizeBy: sum
+		sourceColumn: Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Impressions
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: d48dedcd-d101-41f3-85be-2c38397b1cb1
+		summarizeBy: sum
+		sourceColumn: Impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Link clicks'
+		dataType: int64
+		formatString: #,0
+		lineageTag: fc3aa7ae-47da-449a-a20a-c317727beb20
+		summarizeBy: sum
+		sourceColumn: Link clicks
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Post reactions'
+		dataType: double
+		formatString: #,0
+		lineageTag: 67459208-d18d-4eca-bb8c-783878fc20e8
+		summarizeBy: sum
+		sourceColumn: Post reactions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Post comments'
+		dataType: int64
+		formatString: 0
+		lineageTag: c5afc897-764a-4b06-b265-57bc3c6ad9f9
+		summarizeBy: sum
+		sourceColumn: Post comments
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Post shares'
+		dataType: int64
+		formatString: #,0
+		lineageTag: b10fed04-4337-4d72-9c5c-da662d7c0100
+		summarizeBy: sum
+		sourceColumn: Post shares
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Video play actions'
+		dataType: int64
+		formatString: 0
+		lineageTag: 381cc30c-504d-4915-ac4a-97bde6a37145
+		summarizeBy: sum
+		sourceColumn: Video play actions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Video watches at 25%'
+		dataType: int64
+		formatString: 0
+		lineageTag: a500cdda-8a68-4c9c-8c46-23539752abff
+		summarizeBy: sum
+		sourceColumn: Video watches at 25%
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Video watches at 50%'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1f4fd1a0-e819-4d11-9cde-98af65c4397a
+		summarizeBy: sum
+		sourceColumn: Video watches at 50%
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Video watches at 75%'
+		dataType: int64
+		formatString: 0
+		lineageTag: 193334f4-254e-46d8-990d-1d6559b07f51
+		summarizeBy: sum
+		sourceColumn: Video watches at 75%
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Video watches at 100%'
+		dataType: int64
+		formatString: 0
+		lineageTag: 936bb7b6-868e-4b85-849b-e211fad8d7aa
+		summarizeBy: sum
+		sourceColumn: Video watches at 100%
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Campaign start date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1bc59d50-98f0-4677-b5dd-f932046c0ee5
+		summarizeBy: none
+		sourceColumn: Campaign start date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Campaign end date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: eef0a6bf-ad20-4f78-8102-29cfe0162475
+		summarizeBy: none
+		sourceColumn: Campaign end date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column SEED
+		dataType: string
+		isHidden
+		lineageTag: 4f198ba8-b1b5-4d82-bcff-95e78670a945
+		summarizeBy: none
+		sourceColumn: SEED
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Id Seed'
+		dataType: string
+		lineageTag: a6f2c6d6-eec3-42a9-a016-1d2fa5792130
+		summarizeBy: none
+		sourceColumn: Id Seed
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Máscara Criativo'
+		dataType: string
+		lineageTag: d5591fc5-2f2f-4d2f-9cd3-0635482474e9
+		summarizeBy: none
+		sourceColumn: Máscara Criativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Custo Desembolso' = IF(REDES_FATO[Account]="DMS", REDES_FATO[Cost]*0.95, REDES_FATO[Cost]*1.1875)
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 936fa4d4-ceff-4503-8828-c144ddf06e0a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Column1
+		dataType: string
+		isHidden
+		lineageTag: d2147f0b-2841-4476-b7d6-678bcb557018
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	column _1
+		dataType: string
+		isHidden
+		lineageTag: 0b999cfd-8e6f-4ee7-98eb-9ee8690d6457
+		summarizeBy: none
+		sourceColumn: _1
+
+		annotation SummarizationSetBy = Automatic
+
+	column FILTRO
+		dataType: string
+		isHidden
+		lineageTag: 7b67c32f-926d-46c9-aacb-f9816db0e6b6
+		summarizeBy: none
+		sourceColumn: FILTRO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Compra'
+		dataType: string
+		lineageTag: 563d7112-23c2-4fce-9bb0-43ed3805951a
+		summarizeBy: none
+		sourceColumn: Tipo de Compra
+
+		annotation SummarizationSetBy = Automatic
+
+	column Período
+		dataType: string
+		lineageTag: 9aaebb5c-fa2f-4d17-9166-78a182ee96fe
+		summarizeBy: none
+		sourceColumn: Período
+
+		annotation SummarizationSetBy = Automatic
+
+	column Semana
+		dataType: string
+		lineageTag: 0a22cd90-bc0f-494b-a084-3e089572ded8
+		summarizeBy: none
+		sourceColumn: Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	partition REDES_FATO-77b8c8d6-fd0f-4050-8a31-86351400ee0b = m
+		mode: import
+		queryGroup: FATOS
+		source =
+				let
+				    Fonte = #"REDES_FATO-STAGE",
+				    #"Colunas Removidas" = Table.RemoveColumns(Fonte,{"ID-URL"})
+				in
+				    #"Colunas Removidas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

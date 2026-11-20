@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "3ad57981c7d7683706f3",
+  "displayName": "Receptivo",
+  "displayOption": "FitToWidth",
+  "height": 1400,
+  "width": 1500,
+  "pageBinding": {
+    "name": "0d9fdb961730cad2ba54",
+    "type": "Default",
+    "parameters": []
+  }
+}

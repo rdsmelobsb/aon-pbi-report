@@ -1,0 +1,166 @@
+/// Dimensão com metadados de campanhas, veículos e períodos do plano de mídia de redes.
+table REDES_VEICULOS_DIM
+	lineageTag: 93ab5594-1e1f-4615-941e-cdae278c42c9
+
+	column Veículo
+		dataType: string
+		lineageTag: 53a34078-4dc8-4dab-bf1b-7ec32fa117b9
+		summarizeBy: none
+		sourceColumn: Veículo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Formato
+		dataType: string
+		lineageTag: 232fa843-67a6-49d7-8a99-d44fb2e5f7df
+		summarizeBy: none
+		sourceColumn: Formato
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Compra'
+		dataType: string
+		lineageTag: 674678e2-33b0-430e-a0a5-fa4ed21e4705
+		summarizeBy: none
+		sourceColumn: Tipo de Compra
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Início'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 47009d8e-5c60-48bd-ab80-cb9d9b9694ad
+		summarizeBy: none
+		sourceColumn: Data de Início
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data de Fim'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: d5a180eb-04f7-4081-a650-d813c54709bc
+		summarizeBy: none
+		sourceColumn: Data de Fim
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Planejado
+		dataType: int64
+		formatString: 0
+		lineageTag: 5d9f71a9-1e4e-4253-a36a-b765dd3aaad9
+		summarizeBy: sum
+		sourceColumn: Planejado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Investimento
+		dataType: double
+		lineageTag: e639c852-db75-4f3d-bed6-678b20fddbe1
+		summarizeBy: sum
+		sourceColumn: Investimento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Resultado
+		dataType: double
+		lineageTag: a51f2f74-6e95-4c8f-b39b-da6c6f05c104
+		summarizeBy: sum
+		sourceColumn: Resultado
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Mês
+		dataType: string
+		lineageTag: f93a54eb-0c46-4080-9e4a-f595d1bb8161
+		summarizeBy: none
+		sourceColumn: Mês
+
+		annotation SummarizationSetBy = Automatic
+
+	column Seed
+		dataType: string
+		lineageTag: d5f72298-21f0-46b7-ad6c-e7b54c880e62
+		summarizeBy: none
+		sourceColumn: Seed
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Id Seed'
+		dataType: string
+		lineageTag: a01c1197-8856-417f-9f5d-85cb1dac4207
+		summarizeBy: none
+		sourceColumn: Id Seed
+
+		annotation SummarizationSetBy = Automatic
+
+	column Estado
+		dataType: string
+		lineageTag: 893f7d8c-7375-4db0-acc2-3de649bbbd26
+		summarizeBy: none
+		sourceColumn: Estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segmentação
+		dataType: string
+		lineageTag: 05d61b1b-0a72-47f7-9005-9e9bf37e3a60
+		summarizeBy: none
+		sourceColumn: Segmentação
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campanha
+		dataType: string
+		lineageTag: ae143f2f-e278-4eea-abd3-6d4a3c51cf27
+		summarizeBy: none
+		sourceColumn: Campanha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Filtro
+		dataType: string
+		lineageTag: f1674a9b-b0be-49b3-8908-a21f211309c5
+		summarizeBy: none
+		sourceColumn: Filtro
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 9512eb57-0354-4415-adbf-3bcd6f45f67a
+		summarizeBy: sum
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mascara_Filtro
+		dataType: string
+		lineageTag: 25193d91-3472-4fce-93a5-4634b77c0628
+		summarizeBy: none
+		sourceColumn: Mascara_Filtro
+
+		annotation SummarizationSetBy = Automatic
+
+	partition REDES_VEICULOS_DIM-1cbed6b2-6c15-4841-9a9b-71f7a29775f2 = m
+		mode: import
+		queryGroup: DIMENSÕES
+		source =
+				let
+				    Fonte = REDES_PLANEJADO,
+				    #"Valor Substituído" = Table.ReplaceValue(Fonte,"Contrapartida TikTok","Vídeos TikTok",Replacer.ReplaceText,{"Campanha"})
+				in
+				    #"Valor Substituído"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

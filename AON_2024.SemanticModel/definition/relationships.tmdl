@@ -1,0 +1,41 @@
+relationship 222062a2-602f-4fc2-8e00-a41442faf7e3
+	fromColumn: REDES_FATO.Date
+	toColumn: DATA_DIM.Data
+
+relationship 232e622f-e874-4724-8d4e-ed86c3edfdde
+	fromColumn: GA_FATO.Date
+	toColumn: DATA_DIM.Data
+
+relationship cd4c12d4-c54f-48a9-bb21-4dc65298a476
+	fromColumn: REDES_PLANEJADO.'Data de Início'
+	toColumn: DATA_DIM.Data
+
+relationship cb32f159-9243-4233-a85f-8a88e2d3831d
+	fromColumn: REDES_FATO.'Id Seed'
+	toColumn: REDES_VEICULOS_DIM.'Id Seed'
+
+relationship 13e09e1a-96e8-4211-93d8-150d0b0d4f77
+	fromColumn: REDES_PLANEJADO.'Id Seed'
+	toColumn: REDES_VEICULOS_DIM.'Id Seed'
+
+relationship 5fc000b7-3a81-4feb-8009-4e40b28753e2
+	fromColumn: GA_EVENTOS_FATO.Date
+	toColumn: DATA_DIM.Data
+
+relationship c86a4037-243a-0d2d-4241-b42ad4efe19a
+	fromColumn: REDES_VEICULOS_DIM.'Id Seed'
+	toColumn: DIM_VEICULOS_GERAL.Chave
+
+relationship 0fe18bd7-6dfc-e692-973c-80bfddacf560
+	fromColumn: GA_FATO.IDUNICO
+	toColumn: DIM_VEICULOS_GERAL.Chave
+
+relationship 2ed1b874-1c81-5bbc-cb27-3271d8b5ecb1
+	fromColumn: GA_EVENTOS_FATO.IDUNICO
+	toColumn: DIM_VEICULOS_GERAL.Chave
+
+relationship 5dcb31db-b5b8-faf3-ead2-33db9568438c
+	toCardinality: many
+	fromColumn: REDES_FATO.'Promoted post name'
+	toColumn: dCriativos.'Promoted post name'
+

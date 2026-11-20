@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AON Consolidado — A História do Modelo (2024, 2025 & 2026)</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.25);
+      --accent-2024: #f59e0b;
+      --accent-2025: #10b981;
+      --accent-2026: #6366f1;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 60px 0 30px;
+      text-align: center;
+      position: relative;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffffff 30%, #9ca3af 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 32px;
+    }
+
+    /* Score Banner */
+    .score-banner {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: #374151;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--primary);
+    }
+    .kpi-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+    .kpi-val { font-size: 2rem; font-weight: 800; margin: 6px 0; }
+    .kpi-delta { font-size: 0.85rem; font-weight: 600; }
+    .delta-positive { color: var(--success); }
+    .delta-amber { color: var(--accent-2024); }
+
+    /* Interactive Timeline Tabs */
+    .timeline-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .nav-btn {
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-btn:hover {
+      color: #fff;
+      border-color: #4b5563;
+    }
+    .nav-btn.active[data-year="2024"] {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border-color: #f59e0b;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+    }
+    .nav-btn.active[data-year="2025"] {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border-color: #10b981;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    }
+    .nav-btn.active[data-year="2026"] {
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border-color: #6366f1;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Era Section Cards */
+    .era-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out forwards;
+    }
+    .era-content.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 868px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .card h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Narrative Pillars */
+    .pillar-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .pillar-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .pillar-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+    }
+    .icon-2024 { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .icon-2025 { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .icon-2026 { background: rgba(99, 102, 241, 0.2); color: #818cf8; }
+
+    .pillar-text h3 {
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+    .pillar-text p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    /* Architecture Visualizer Box */
+    .arch-box {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .arch-node {
+      background: #172033;
+      border: 1px dashed #374151;
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .arch-node.active-node {
+      border-style: solid;
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.08);
+    }
+    .arch-node.deprecated-node {
+      border-color: #dc2626;
+      background: rgba(220, 38, 38, 0.08);
+      text-decoration: line-through;
+      color: #9ca3af;
+    }
+    .tag {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .tag-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .tag-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .tag-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+    /* Comparison Table */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    th, td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    th {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <span class="badge">AON_2024 PBIP • Linha do Tempo</span>
+      <h1>A Evolução Histórica do Modelo de Mídia</h1>
+      <p class="subtitle">
+        Da dispersão multicanal e planilhas legadas de 2024 à modernização estrutural de 2025 e o salto para a engenharia de dados <strong>Grade A (95.2%)</strong> em 2026.
+      </p>
+
+      <!-- KPI Summary Cards -->
+      <div class="score-banner">
+        <div class="kpi-card">
+          <div class="kpi-label">Nota de Auditoria (TMDL)</div>
+          <div class="kpi-val" style="color: #22c55e;">95.2%</div>
+          <div class="kpi-delta delta-positive">▲ Salto de +22.0% (Grade C para A)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Tabelas do Modelo</div>
+          <div class="kpi-val">12</div>
+          <div class="kpi-delta delta-positive">▼ -37% overhead (7 tabelas auto-date removidas)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Relacionamentos Ativos</div>
+          <div class="kpi-val">9</div>
+          <div class="kpi-delta delta-positive">100% Star Schema limpo (sem joins espúrios)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Governança de Medidas</div>
+          <div class="kpi-val">54 / 54</div>
+          <div class="kpi-delta delta-positive">100% documentadas e organizadas em pastas</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="timeline-nav">
+        <button class="nav-btn" data-year="2024" onclick="showEra('2024')">
+          <span>● 2024: A Origem Multicanal</span>
+        </button>
+        <button class="nav-btn" data-year="2025" onclick="showEra('2025')">
+          <span>● 2025: O Foco na Conversão</span>
+        </button>
+        <button class="nav-btn active" data-year="2026" onclick="showEra('2026')">
+          <span>● 2026: O Salto de Engenharia</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ERA 2024 -->
+    <div id="era-2024" class="era-content">
+      <div class="main-grid">
+        <div class="card">
+          <h2 style="color: var(--accent-2024);">2024: O Nascimento da Consolidação</h2>
+          <p style="color: var(--text-muted); margin-bottom: 20px;">
+            Em 2024, a operação de mídia enfrentava o desafio de unificar campanhas dispersas em quatro redes sociais distintas (Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads) em conjunto com uma infraestrutura legada de AdServer programático.
+          </p>
+          <ul class="pillar-list">
+            <li class="pillar-item">
+              <div class="pillar-icon icon-2024">01</div>
+              <div class="pillar-text">
+                <h3>Fragmentação de Planilhas Google Sheets</h3>
+                <p>Os dados eram extraídos via API Google Sheets em tabelas separadas (<code>CONSOLIDADO</code>, <code>Planejado</code>, <code>GA4</code>), gerando discrepâncias frequentes de schema e colunas em branco preenchidas manualmente no Power Query.</p>
+              </div>
+            </li>
+            <li class="pillar-item">
+              <div class="pillar-icon icon-2024">02</div>
+              <div class="pillar-text">
+                <h3>A Chave Híbrida <code>Id Seed</code></h3>
+                <p>Criação do relacionamento mestre unindo o Mês da campanha e o identificador do anúncio (<code>Date - Copiar & '|' & SEED</code>) para ligar o planejado de mídia à entrega real.</p>
+              </div>
+            </li>
+            <li class="pillar-item">
+              <div class="pillar-icon icon-2024">03</div>
+              <div class="pillar-text">
+                <h3>O Peso do AdServer Legado</h3>
+                <p>O modelo precisava manter tabelas separadas para o AdServer (<code>ADSERVER_PLANEJADO</code>, <code>ADSERVER_MEDIDAS</code>) e somar em DAX (ex: <code>[As_Impressao] + [rd_impressões]</code>), duplicando complexidade.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>Arquitetura em 2024</h2>
+          <div class="arch-box">
+            <div class="arch-node">
+              <span>Google Sheets API (CONSOLIDADO)</span>
+              <span class="tag tag-blue">ETL M</span>
+            </div>
+            <div class="arch-node">
+              <span>Google Sheets API (GA4 + Eventos)</span>
+              <span class="tag tag-green">Analytics</span>
+            </div>
+            <div class="arch-node">
+              <span>ADSERVER_MEDIDAS & PLANEJADO</span>
+              <span class="tag tag-amber" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">Legado Ativo</span>
+            </div>
+            <div class="arch-node">
+              <span>Auto Date/Time (7x LocalDateTables)</span>
+              <span class="tag tag-red">Bloat de Memória</span>
+            </div>
+            <div class="arch-node active-node">
+              <span>Power BI (.pbix clássico / 21 Páginas)</span>
+              <span class="tag tag-blue">Desktop</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERA 2025 -->
+    <div id="era-2025" class="era-content">
+      <div class="main-grid">
+        <div class="card">
+          <h2 style="color: var(--accent-2025);">2025: Amadurecimento & Foco na Conversão Real</h2>
+          <p style="color: var(--text-muted); margin-bottom: 20px;">
+            Com a maturação das campanhas, a diretoria percebeu que impressões brutas de AdServer não geravam leads nem resultados institucionais comparáveis aos canais sociais. O foco migrou para a eficiência de aquisição e experiência on-site.
+          </p>
+          <ul class="pillar-list">
+            <li class="pillar-item">
+              <div class="pillar-icon icon-2025">01</div>
+              <div class="pillar-text">
+                <h3>O Funil Receptivo de GA4</h3>
+                <p>Consolidação do monitoramento de comportamento: tempo médio de permanência (<code>Avg. session length</code>), novas sessões e taxa de rejeição associadas à chave de cada criativo.</p>
+              </div>
+            </li>
+            <li class="pillar-item">
+              <div class="pillar-icon icon-2025">02</div>
+              <div class="pillar-text">
+                <h3>Métricas de Eficiência Financeira</h3>
+                <p>Introdução de indicadores essenciais de negócio: <strong>Custo por Sessão GA4</strong> e <strong>Custo por Evento</strong>, provando a qualidade do tráfego entregue.</p>
+              </div>
+            </li>
+            <li class="pillar-item">
+              <div class="pillar-icon icon-2025">03</div>
+              <div class="pillar-text">
+                <h3>Controle Rigoroso de Pacing (Under/Over)</h3>
+                <p>Desenvolvimento dos cálculos de pacing diário (<code>rd_dataPacing_UxO</code>), permitindo que a equipe de mídia ajustasse os orçamentos antes do fim do ciclo de cada campanha.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>Foco Analítico em 2025</h2>
+          <div class="arch-box">
+            <div class="arch-node active-node">
+              <span>Dimensão Unificada (DIM_VEICULOS_GERAL)</span>
+              <span class="tag tag-green">Ponte de Dados</span>
+            </div>
+            <div class="arch-node">
+              <span>Análise de Pacing e Desempenho Diário</span>
+              <span class="tag tag-blue">Orçamento</span>
+            </div>
+            <div class="arch-node">
+              <span>Receptivo GA4 & Eventos de Conversão</span>
+              <span class="tag tag-green">On-Site</span>
+            </div>
+            <div class="arch-node">
+              <span>AdServer em Desuso Progressivo</span>
+              <span class="tag tag-red">Ruído Visual</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERA 2026 -->
+    <div id="era-2026" class="era-content active">
+      <div class="main-grid">
+        <div class="card">
+          <h2 style="color: var(--accent-2026);">2026: O Salto para a Engenharia de Dados Moderna</h2>
+          <p style="color: var(--text-muted); margin-bottom: 20px;">
+            A virada para o formato <strong>PBIP (Fabric / Developer Mode)</strong> e a aplicação da auditoria <strong>powerbi-audit</strong> elevaram o modelo a um padrão de produção corporativo (*Grade A*), pronto para escalabilidade e governança.
+          </p>
+          <ul class="pillar-list">
+            <li class="pillar-item">
+              <div class="pillar-icon icon-2026">01</div>
+              <div class="pillar-text">
+                <h3>Extirpação Cirúrgica do AdServer</h3>
+                <p>Remoção de 4 páginas completas do relatório, tabelas <code>ADSERVER_*</code> e todos os seletores órfãos, tornando as medidas consolidadas 100% fiéis às redes sociais ativas.</p>
+              </div>
+            </li>
+            <li class="pillar-item">
+              <div class="pillar-icon icon-2026">02</div>
+              <div class="pillar-text">
+                <h3>Eliminação do Bloat de Memória (Auto Date/Time)</h3>
+                <p>Desativação do <code>__PBI_TimeIntelligenceEnabled</code>, exclusão de 7 tabelas ocultas e de 6 relacionamentos redundantes. A dimensão <code>DATA_DIM</code> foi coroada como o calendário oficial (<code>dataCategory: Time</code>).</p>
+              </div>
+            </li>
+            <li class="pillar-item">
+              <div class="pillar-icon icon-2026">03</div>
+              <div class="pillar-text">
+                <h3>Governança Estrita & Display Folders</h3>
+                <p>30 colunas numéricas de fatos foram ocultadas para evitar agregações implícitas. Todas as 54 medidas ganharam descrições de negócio e pastas organizadas (<code>Pacing</code>, <code>Desempenho</code>, <code>Vídeo</code>, <code>Engajamento</code>, <code>GA4</code>).</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>Arquitetura Otimizada (2026)</h2>
+          <div class="arch-box">
+            <div class="arch-node active-node">
+              <span>DATA_DIM (Calendário Oficial • dataCategory: Time)</span>
+              <span class="tag tag-green">Dim Central</span>
+            </div>
+            <div class="arch-node active-node">
+              <span>REDES_FATO & REDES_PLANEJADO (Colunas Ocultas)</span>
+              <span class="tag tag-blue">Fato Segura</span>
+            </div>
+            <div class="arch-node active-node">
+              <span>GA_FATO & GA_EVENTOS_FATO (Receptivo)</span>
+              <span class="tag tag-blue">Fato Web</span>
+            </div>
+            <div class="arch-node active-node">
+              <span>DIM_VEICULOS_GERAL (Bridge Star Schema)</span>
+              <span class="tag tag-green">Dim Veículos</span>
+            </div>
+            <div class="arch-node deprecated-node">
+              <span>ADSERVER & LocalDateTables</span>
+              <span class="tag tag-red">100% Removidos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparative Table -->
+    <div class="card">
+      <h2>Matriz de Comparação Evolutiva</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Dimensão de Engenharia</th>
+              <th>2024 (Legado)</th>
+              <th>2025 (Transição)</th>
+              <th>2026 (Moderno Grade A)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Formato do Arquivo</strong></td>
+              <td>Arquivo monolítico (.pbix binário)</td>
+              <td>.pbix com migração para DevMode</td>
+              <td><strong>PBIP modular + TMDL + PBIR</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Canais Contemplados</strong></td>
+              <td>Redes Sociais + AdServer programático</td>
+              <td>Redes Sociais + GA4 prioritário</td>
+              <td><strong>Redes Sociais + GA4 + Planejado estrito</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Auditoria de Boas Práticas</strong></td>
+              <td>Nenhuma (não avaliado)</td>
+              <td>Empírica / Manual (~70% estimado)</td>
+              <td><strong>95.2% (Grade A - powerbi-audit)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Auto Date/Time Bloat</strong></td>
+              <td>Ativado (7 tabelas ocultas e 6 joins)</td>
+              <td>Ativado (acumulando memória)</td>
+              <td><strong>Desativado • Zero tabelas ocultas</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Visibilidade de Fatos</strong></td>
+              <td>Colunas numéricas 100% expostas</td>
+              <td>Risco de soma implícita no visual</td>
+              <td><strong>30 colunas de métricas ocultadas</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Organização de DAX</strong></td>
+              <td>Lista corrida sem pastas</td>
+              <td>Separação básica por tabelas</td>
+              <td><strong>Display Folders + Descrições 100%</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      <p>AON_2024.pbip • Relatório de Engenharia e Evolução do Modelo Semântico • Gerado com auxílio de Antigravity Skills (powerbi-audit & to-html)</p>
+    </footer>
+  </div>
+
+  <script>
+    function showEra(year) {
+      document.querySelectorAll('.era-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+      const target = document.getElementById('era-' + year);
+      const btn = document.querySelector(`.nav-btn[data-year="${year}"]`);
+      if (target) target.classList.add('active');
+      if (btn) btn.classList.add('active');
+    }
+  </script>
+</body>
+</html>

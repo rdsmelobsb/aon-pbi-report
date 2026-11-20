@@ -1,0 +1,45 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		fastCombine
+		legacyRedirects
+		returnErrorValuesAsNull
+
+/// Pasta para organizar as tabelas fatos do modelo.
+queryGroup FATOS
+
+	annotation PBI_QueryGroupOrder = 0
+
+/// Pasta para organizar as consultas referentes a Dimensões
+queryGroup DIMENSÕES
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup MEDIDAS
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation PBI_QueryOrder = ["GA_MEDIDAS","GERAL_MEDIDAS","GA_FATO","GA_EVENTOS_FATO","REDES_FATO","REDES_PLANEJADO","dCriativos","dm_atualizacao","DATA_DIM","DIM_VEICULOS_GERAL","REDES_VEICULOS_DIM","REDES_MEDIDAS","CONSOLIDADO","PLANEJADO","Validação","GA4","GA4-EVENTOS","REDES_FATO-STAGE"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table REDES_FATO
+ref table REDES_MEDIDAS
+ref table GERAL_MEDIDAS
+ref table REDES_PLANEJADO
+ref table REDES_VEICULOS_DIM
+ref table DATA_DIM
+ref table GA_FATO
+ref table GA_MEDIDAS
+ref table DIM_VEICULOS_GERAL
+ref table GA_EVENTOS_FATO
+ref table rd_LinhasGrafico
+ref table dm_atualizacao
+ref table dCriativos
+
+ref cultureInfo pt-BR
+

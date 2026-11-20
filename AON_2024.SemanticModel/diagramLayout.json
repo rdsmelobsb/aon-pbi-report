@@ -1,0 +1,182 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 560.89732648826964,
+        "y": 731.31743288849907
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 275.49291499999924,
+            "y": 0
+          },
+          "nodeIndex": "REDES_MEDIDAS",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 532.600181999999,
+            "y": 0
+          },
+          "nodeIndex": "GERAL_MEDIDAS",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 650.40143999999839,
+            "y": 958.41450100000088
+          },
+          "nodeIndex": "REDES_PLANEJADO",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 976.80014900000037,
+            "y": 965.500745000001
+          },
+          "nodeIndex": "REDES_FATO",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 786.60915238296661,
+            "y": 1306.48233164706
+          },
+          "nodeIndex": "REDES_VEICULOS_DIM",
+          "nodeLineageTag": "93ab5594-1e1f-4615-941e-cdae278c42c9",
+          "size": {
+            "height": 259.81238660784334,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 475.73929799999837,
+            "y": 637.76196000000061
+          },
+          "nodeIndex": "DATA_DIM",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 1304.7976989999995,
+            "y": 965.50074500000107
+          },
+          "nodeIndex": "GA_FATO",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 791.27593099999854,
+            "y": 0
+          },
+          "nodeIndex": "GA_MEDIDAS",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 502.57216120721091,
+            "y": 1603.6107456678249
+          },
+          "nodeIndex": "DIM_VEICULOS_GERAL",
+          "size": {
+            "height": 203.74409729875015,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 1623.0235294117645,
+            "y": 941.91271560093458
+          },
+          "nodeIndex": "GA_EVENTOS_FATO",
+          "nodeLineageTag": "c48a1db6-2946-425a-82cb-e23ae90c7886",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1964.2,
+            "y": 827.6774214832875
+          },
+          "nodeIndex": "rd_LinhasGrafico",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2248.2,
+            "y": 851.6774214832875
+          },
+          "nodeIndex": "dm_atualizacao",
+          "nodeLineageTag": "ded72e63-bfc5-4c79-bd9c-4d292739fa44",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1182.8948244328237,
+            "y": 728.81279127492712
+          },
+          "nodeIndex": "dCriativos",
+          "nodeLineageTag": "caee080f-09bf-404b-9af8-eb386c2dabd2",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 80.585158576157511,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

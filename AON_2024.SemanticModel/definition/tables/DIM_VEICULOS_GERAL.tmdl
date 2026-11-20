@@ -1,0 +1,100 @@
+/// Dimensão unificada de veículos de mídia que conecta os canais de redes ao Google Analytics.
+table DIM_VEICULOS_GERAL
+	lineageTag: c7ef2b67-c9e0-45f7-af67-834f78da3f40
+
+	column Veículos
+		dataType: string
+		lineageTag: 92346d08-1ba9-4fe3-ab98-ef8dfd1c6398
+		summarizeBy: none
+		sourceColumn: Veículos
+
+		annotation SummarizationSetBy = Automatic
+
+	column Chave
+		dataType: string
+		lineageTag: 96b51af8-00c4-4931-882f-f9aee6cee96f
+		summarizeBy: none
+		sourceColumn: Chave
+
+		annotation SummarizationSetBy = Automatic
+
+	column Produto
+		dataType: string
+		lineageTag: 9bfec650-a7d5-4a04-9d17-7ba77596173e
+		summarizeBy: none
+		sourceColumn: Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Compra'
+		dataType: string
+		lineageTag: 157fe19d-8a21-468b-a70a-5be3d23c755a
+		summarizeBy: none
+		sourceColumn: Tipo de Compra
+
+		annotation SummarizationSetBy = Automatic
+
+	column Estado
+		dataType: string
+		lineageTag: 5a483b6f-f7b3-4541-9e4a-6597858117c4
+		summarizeBy: none
+		sourceColumn: Estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segmentação
+		dataType: string
+		lineageTag: 3ea8d350-dee6-4037-9b6b-14a457837c1d
+		summarizeBy: none
+		sourceColumn: Segmentação
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Início'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3a570072-9ba8-45c0-aea5-fc579f7b8f53
+		summarizeBy: none
+		sourceColumn: Data de Início
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data de Fim'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c858d8df-d67a-4228-92de-279da2412055
+		summarizeBy: none
+		sourceColumn: Data de Fim
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Planejado
+		dataType: int64
+		formatString: 0
+		lineageTag: d0bdca77-3852-4590-a97f-05b440e4131e
+		summarizeBy: sum
+		sourceColumn: Planejado
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_VEICULOS_GERAL-70e3aa31-5d5f-4ff2-8add-7c7cd2e4d1fb = m
+		mode: import
+		queryGroup: DIMENSÕES
+		source =
+				let
+				    Fonte = REDES_PLANEJADO,
+				    #"Colunas Renomeadas" = Table.RenameColumns(Fonte,{{"Campanha", "Produto"}}),
+				    #"Outras Colunas Removidas" = Table.SelectColumns(#"Colunas Renomeadas",{"Estado", "Produto", "Veículo", "Segmentação", "Tipo de Compra", "Data de Início", "Data de Fim", "Planejado", "Id Seed"}),
+				    #"Colunas Renomeadas1" = Table.RenameColumns(#"Outras Colunas Removidas",{{"Veículo", "Veículos"}, {"Id Seed", "Chave"}}),
+				    #"Colunas Reordenadas" = Table.ReorderColumns(#"Colunas Renomeadas1",{"Veículos", "Chave", "Produto", "Tipo de Compra"})
+				in
+				    #"Colunas Reordenadas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

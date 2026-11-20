@@ -1,0 +1,316 @@
+/// Tabela dedicada com as medidas analíticas de redes sociais (CPM, CPC, CPV, Pacing e VTR).
+table REDES_MEDIDAS
+	lineageTag: ee67522f-35e7-4655-a041-f785c1647ba4
+
+	/// Investimento total desembolsado em campanhas de redes sociais.
+	measure rd_custo = SUM(REDES_FATO[Custo Desembolso])
+		formatString: "R$"\ #,0.0;-"R$"\ #,0.0;"R$"\ #,0.0
+		displayFolder: Desempenho & Custos
+		lineageTag: bed04b86-71af-4abf-b3d8-e4f5585281fa
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Total de visualizações/impressões dos anúncios nas redes.
+	measure rd_impressões = SUM(REDES_FATO[Impressions])
+		formatString: #,0
+		displayFolder: Desempenho & Custos
+		lineageTag: e5cd9460-955d-42c4-a090-1a5156f7e98e
+
+		changedProperty = FormatString
+
+	/// Total de cliques no link em publicações promovidas.
+	measure rd_cliques = SUM(REDES_FATO[Link clicks])
+		formatString: #,0
+		displayFolder: Desempenho & Custos
+		lineageTag: aa03b217-013b-4067-8cbe-be20d3f94f79
+
+	/// Taxa de cliques (Cliques no Link / Impressões).
+	measure rd_ctr = DIVIDE([rd_cliques],[rd_impressões])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Desempenho & Custos
+		lineageTag: fd03bbaa-72ac-4c2f-aa1a-9df34edfea11
+
+		changedProperty = FormatString
+
+	/// Custo por mil impressões (Custo / Impressões * 1000).
+	measure rd_CPM = DIVIDE([rd_custo],[rd_impressões]) *1000
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Desempenho & Custos
+		lineageTag: dbce1fa8-9a6d-42cc-97e7-3f93413bf488
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Total de reproduções de vídeo iniciadas.
+	measure rd_views = SUM(REDES_FATO[Video play actions])
+		formatString: #,0
+		displayFolder: Vídeo & Retenção
+		lineageTag: ba2a926e-fb54-438c-8834-34b8abd768cd
+
+	/// Total de reproduções de vídeo até 25% da duração.
+	measure rd_video25 = SUM(REDES_FATO[Video watches at 25%])
+		formatString: #,0
+		displayFolder: Vídeo & Retenção
+		lineageTag: 5c959cba-744b-441c-bd25-9406752bafa8
+
+	/// Total de reproduções de vídeo até 50% da duração.
+	measure rd_video50 = SUM(REDES_FATO[Video watches at 50%])
+		formatString: #,0
+		displayFolder: Vídeo & Retenção
+		lineageTag: fb8084f0-9e2f-48e6-8481-82ea0ccc8723
+
+	/// Total de reproduções de vídeo até 75% da duração.
+	measure rd_video75 = SUM(REDES_FATO[Video watches at 75%])
+		formatString: #,0
+		displayFolder: Vídeo & Retenção
+		lineageTag: 8f5b6256-9596-4a74-bee2-74cc8ca29343
+
+	/// Total de reproduções de vídeo completas (100%).
+	measure rd_video100 = SUM(REDES_FATO[Video watches at 100%])
+		formatString: #,0
+		displayFolder: Vídeo & Retenção
+		lineageTag: 6c6216c5-3f7c-4e4a-a1a2-5723124ded9f
+
+		changedProperty = FormatString
+
+	/// Taxa de retenção de vídeo (Vídeo 100% / Vídeo 25%).
+	measure rd_retencao = DIVIDE([rd_video100],[rd_video25])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Vídeo & Retenção
+		lineageTag: b808bbcb-0d35-42a8-974c-9baa5fdcabf3
+
+		changedProperty = FormatString
+
+	/// Custo por visualização de vídeo iniciada (Custo / Views).
+	measure rd_CPV = DIVIDE([rd_custo],[rd_views])
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Vídeo & Retenção
+		lineageTag: ec69ce70-05d5-46b7-ad31-39f153f9160b
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Custo por visualização de vídeo 100% concluída.
+	measure rd_CPV100 = DIVIDE([rd_custo],[rd_video100])
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Vídeo & Retenção
+		lineageTag: 404a7251-fec2-4eaa-a161-fe10cc5a0509
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Taxa de visualização de vídeo em relação às impressões.
+	measure rd_txvisualizacao =
+			
+			VAR IMPRESSIONS = CALCULATE( [rd_impressões], REDES_FATO[Video watches at 25%] > 0 )
+			
+			RETURN
+			
+			
+			DIVIDE([rd_views],IMPRESSIONS)
+		formatString: #,0.00%;-#,0.00%;#,0.00%
+		displayFolder: Vídeo & Retenção
+		lineageTag: 25055524-ec97-4c3e-afbd-e906a109ae29
+
+		changedProperty = FormatString
+
+	/// Valor financeiro planejado para o período/campanha.
+	measure rd_planejado = SUM(REDES_PLANEJADO[Resultado])
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Pacing
+		lineageTag: f22de7dc-f03c-402e-a7c3-964cddfa063a
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Percentual de atingimento do realizado em relação ao planejado.
+	measure 'rd_Planejado x Realizado' = DIVIDE([rd_custo],[rd_planejado])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Pacing
+		lineageTag: d3ac60d4-9901-4897-bc5b-edcb275edaf7
+
+	/// Custo médio por clique no link (Custo / Cliques).
+	measure rd_cpc = DIVIDE([rd_custo],[rd_cliques])
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Desempenho & Custos
+		lineageTag: f79448e6-81dd-4e66-9194-6df115d0dfc4
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Diferença financeira absoluta entre planejado e realizado.
+	measure rd_Planejado-Realizado = [rd_planejado]-[rd_custo]
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Pacing
+		lineageTag: 758c7884-7a0e-418f-ae33-4bd355c52c2e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Primeira data de início registrada para a campanha.
+	measure rd_dataInicio = ```
+			
+			FIRSTDATE(REDES_FATO[Date])
+			
+			//Dia de inicio da campanha na plataforma 
+			```
+		formatString: Short Date
+		displayFolder: Pacing
+		lineageTag: 4a828a01-86e4-4b16-a557-a39b34626080
+
+	/// Data final programada da campanha.
+	measure rd_dataFinal =
+			
+			LASTDATE(REDES_VEICULOS_DIM[Data de Fim])
+			
+			//Ultimo dia da campanha na tabela de planejado
+		formatString: Short Date
+		displayFolder: Pacing
+		lineageTag: effc3d83-e8f8-49e2-957c-b9effea02c06
+
+	/// Duração total da campanha em dias corridos.
+	measure rd_dataTotaldeDiasCampanha =
+			ABS(DATEDIFF([rd_dataFinal],[rd_dataInicio],DAY))+1
+			//Total de dias da campanha
+		formatString: 0
+		displayFolder: Pacing
+		lineageTag: 08ce96a9-0a26-4b48-8090-03708264b568
+
+	/// Data de corte/referência atual para cálculo de pacing.
+	measure rd_dataAtual =
+			MAX(REDES_FATO[Date])
+			
+			//Ultimo dia de entrada de dados da plataforma
+		formatString: Short Date
+		displayFolder: Pacing
+		lineageTag: ba0923de-ea6b-4494-b078-e0703b60db4e
+
+	/// Número de dias transcorridos desde o início da campanha.
+	measure rd_dataDiasdoInicio =
+			DATEDIFF([rd_dataInicio],[rd_dataAtual],DAY)+1
+			
+			//Quantidade de dias desde o inicio da campanha
+		formatString: 0
+		displayFolder: Pacing
+		lineageTag: 0b0e3f19-4a10-48c5-b349-d9e68945fb0e
+
+	/// Pacing teórico esperado para a data atual da campanha.
+	measure rd_dataPacingdoDia =
+			DIVIDE([rd_dataDiasdoInicio],[rd_dataTotaldeDiasCampanha])
+			
+			//Proporção de dias realizados em relação aos dias planejados
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Pacing
+		lineageTag: 7303e3b2-6fa1-4143-8449-8880220043f5
+
+	/// Under/Over pacing: diferença entre o pacing realizado e o pacing teórico esperado.
+	measure rd_dataPacing_UxO = [rd_Planejado x Realizado] - [rd_dataPacingdoDia]
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Pacing
+		lineageTag: f93c7d79-ceec-4986-87e2-a856392717e3
+
+	/// Soma total de reações, comentários e compartilhamentos.
+	measure rd_engajamento = SUM(REDES_FATO[Post reactions])+SUM(REDES_FATO[Post comments])+SUM(REDES_FATO[Post shares])
+		formatString: #,0
+		displayFolder: Engajamento
+		lineageTag: 5cfd4131-7ea8-4685-b88d-3545b5840add
+
+		changedProperty = FormatString
+
+	/// Taxa de engajamento em relação às impressões.
+	measure 'rd_Tx. Engajamento' = ```
+			DIVIDE([rd_engajamento],[rd_impressões]) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Engajamento
+		lineageTag: db0ae435-7d18-4f1b-889c-73870bd41703
+
+		changedProperty = FormatString
+
+	/// Custo médio por engajamento (Custo / Engajamento).
+	measure rd_CPE = DIVIDE([rd_custo], [rd_engajamento])
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Engajamento
+		lineageTag: e0e1a2e4-06ab-4e63-9491-8103d23ec91a
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// Taxa de conclusão total de vídeo (100%).
+	measure VTR100% =
+			
+			
+			VAR IMPRESSIONS = CALCULATE( [rd_impressões], REDES_FATO[Video watches at 25%] > 0 )
+			
+			RETURN
+			
+			
+			DIVIDE([rd_video100],IMPRESSIONS)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Vídeo & Retenção
+		lineageTag: 377cc61c-fb27-4237-9a5a-a06523e478f5
+
+	/// Taxa de conclusão de vídeo de pelo menos 50%.
+	measure VTR50% =
+			
+			
+			VAR IMPRESSIONS = CALCULATE( [rd_impressões], REDES_FATO[Video watches at 25%] > 0 )
+			
+			RETURN
+			
+			
+			DIVIDE([rd_video50],IMPRESSIONS)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Vídeo & Retenção
+		lineageTag: d59f5a1c-77bd-4ee6-b414-07a6947fdbe0
+
+	/// Custo médio apurado por resultado atingido.
+	measure 'Custo por Resultado' = ```
+			
+			VAR Tipo   = SELECTEDVALUE(REDES_VEICULOS_DIM[Tipo de Compra])
+			VAR Custo  = [rd_custo]
+			VAR Cliques= [rd_cliques]
+			VAR Views  = [rd_views]
+			VAR Impr   = [rd_impressões]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    Tipo = "CPC", DIVIDE(Custo, Cliques),               -- Custo por clique
+			    Tipo = "CPV", DIVIDE(Custo, Views),                 -- Custo por view
+			    Tipo = "CPM", DIVIDE(Custo, Impr) * 1000,           -- Custo por mil
+			    BLANK()
+			)
+			
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Desempenho & Custos
+		lineageTag: 1dee55c7-3304-497a-b083-6f5a42bfdb85
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	/// View-Through Rate: proporção de visualizações de vídeo.
+	measure VTR =
+			
+			
+			
+			DIVIDE([rd_views],[rd_impressões])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Vídeo & Retenção
+		lineageTag: 3e1f5ed4-e39b-4945-bd65-a8c0b4f42a8d
+
+	partition REDES_MEDIDAS-5c443fae-cc48-476f-b441-53c7eb45a629 = m
+		mode: import
+		queryGroup: MEDIDAS
+		source =
+				let
+				    Fonte = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Coluna 1" = _t]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Coluna 1", type text}}),
+				    #"Colunas Removidas" = Table.RemoveColumns(#"Tipo Alterado",{"Coluna 1"})
+				in
+				    #"Colunas Removidas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

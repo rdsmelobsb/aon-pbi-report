@@ -1,0 +1,67 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "5eb9f95cce88ea360b45",
+  "displayName": "One Page Mobile",
+  "displayOption": "FitToPage",
+  "height": 1889,
+  "width": 768,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'One Page - Semanal - 03 (4).png'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "One_Page_-_Semanal_-_03_(4)05371760016458971.png"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Normal'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "70be6f3f217eac51dcb5",
+      "target": "e88ffd13a756e4f8aa47",
+      "type": "NoFilter"
+    },
+    {
+      "source": "70be6f3f217eac51dcb5",
+      "target": "2476e43c23ab4bbd776c",
+      "type": "NoFilter"
+    },
+    {
+      "source": "70be6f3f217eac51dcb5",
+      "target": "fe465bf8ab3d728b9f41",
+      "type": "NoFilter"
+    }
+  ]
+}

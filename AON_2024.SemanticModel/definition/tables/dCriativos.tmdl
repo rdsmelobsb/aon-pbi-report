@@ -1,0 +1,90 @@
+/// Dimensão de criativos com nomes sanitizados e URLs das peças promovidas.
+table dCriativos
+	lineageTag: caee080f-09bf-404b-9af8-eb386c2dabd2
+
+	column 'Campaign name'
+		dataType: string
+		lineageTag: 54b59a2e-c1d5-418a-b164-af176c70df46
+		summarizeBy: none
+		sourceColumn: Campaign name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ad set name'
+		dataType: string
+		lineageTag: 5ba659c3-4fd5-4f7a-a59a-854220b5c374
+		summarizeBy: none
+		sourceColumn: Ad set name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Chave técnica original do post promovido (utilizada no relacionamento com REDES_FATO).
+	column 'Promoted post name'
+		dataType: string
+		isHidden
+		lineageTag: 0b23aaf0-cffe-4c25-afb1-99fb99957969
+		summarizeBy: none
+		sourceColumn: Promoted post name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// URL da imagem ou prévia do criativo promovido.
+	column 'Promoted post image URL'
+		dataType: string
+		lineageTag: 3ba04cc5-5b14-408b-8ac3-a363e8658c24
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: Promoted post image URL
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Nome amigável e sanitizado do criativo publicitário.
+	column Criativo
+		dataType: string
+		lineageTag: 029790aa-5ab8-46a7-ac36-8a3fed533eaf
+		summarizeBy: none
+		sourceColumn: Criativo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dCriativos = m
+		mode: import
+		queryGroup: DIMENSÕES
+		source =
+				let
+				    Fonte = REDES_FATO,
+				    #"Outras Colunas Removidas" = Table.SelectColumns(Fonte,{"Campaign name", "Ad set name", "Promoted post name", "Promoted post image URL"}),
+				    #"Duplicatas Removidas" = Table.Distinct(#"Outras Colunas Removidas"),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Duplicatas Removidas","",each [Promoted post name],Replacer.ReplaceValue,{"Promoted post image URL"}),
+				    #"Valor Substituído1" = Table.ReplaceValue(#"Valor Substituído","",each [Ad set name],Replacer.ReplaceValue,{"Promoted post image URL"}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Valor Substituído1",{{"Campaign name", type text}, {"Ad set name", type text}, {"Promoted post name", type text}, {"Promoted post image URL", type text}}),
+				    fnSanitizarNome = (texto as nullable text) as text =>
+				        if texto = null or Text.Trim(texto) = "" then
+				            "Sem Identificação"
+				        else
+				            let
+				                posTracking = Text.PositionOf(texto, "(naugm", 0, Comparer.OrdinalIgnoreCase),
+				                semTracking = if posTracking > 0 then Text.Start(texto, posTracking) else texto,
+				                substituido = Text.Replace(Text.Replace(Text.Replace(Text.Replace(Text.Replace(Text.Replace(Text.Replace(semTracking, "(", " "), ")", " "), "[", " "), "]", " "), "_", " "), "-", " "), "|", " "),
+				                palavras = Text.Split(substituido, " "),
+				                palavrasFiltradas = List.Select(palavras, each
+				                    let
+				                        termo = Text.Lower(Text.Trim(_)),
+				                        ehNumeroLongo = (Text.Select(termo, {"0".."9"}) = termo and Text.Length(termo) >= 5),
+				                        ehResolucao = List.Contains({"1080x1080", "1200x628", "1920x1080", "1080x1920", "9x16", "16x9", "1x1"}, termo)
+				                    in
+				                        termo <> "" and not ehNumeroLongo and not ehResolucao
+				                ),
+				                textoLimpo = Text.Combine(palavrasFiltradas, " "),
+				                resultado = if Text.Trim(textoLimpo) = "" then Text.Trim(semTracking) else Text.Trim(textoLimpo),
+				                formatado = Text.Proper(resultado)
+				            in
+				                formatado,
+				    #"Criativo Sanitizado Adicionado" = Table.AddColumn(#"Tipo Alterado", "Criativo", each fnSanitizarNome([Promoted post name]), type text)
+				in
+				    #"Criativo Sanitizado Adicionado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
