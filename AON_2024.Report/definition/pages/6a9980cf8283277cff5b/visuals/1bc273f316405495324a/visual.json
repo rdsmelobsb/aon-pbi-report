@@ -43,7 +43,7 @@
               },
               "queryRef": "REDES_FATO.Campaign name",
               "nativeQueryRef": "Campaign name",
-              "active": false
+              "active": true
             }
           ]
         },
@@ -207,7 +207,30 @@
             "isPinned": true
           }
         ],
-        "root": {}
+        "root": {
+          "children": [
+            {
+              "identityValues": [
+                {
+                  "Literal": {
+                    "Value": "'Meta'"
+                  }
+                }
+              ],
+              "isToggled": true
+            },
+            {
+              "identityValues": [
+                {
+                  "Literal": {
+                    "Value": "'Tiktok'"
+                  }
+                }
+              ],
+              "isToggled": true
+            }
+          ]
+        }
       }
     ],
     "objects": {

@@ -79,6 +79,7 @@ skills/<skill-name>/
   - TMDL descriptions: MUST use `///` doc comments directly above declarations; NEVER use `description:` properties (causes `UnknownKeyword`)
   - Power Query M functions: `Text.Select` strictly requires character lists or text, NEVER predicate functions (`each ...`)
   - Dimension key cleansing: retain raw foreign keys as `isHidden` to preserve 1:* relationships while exposing user-friendly formatted columns
+  - Date functions for join keys: `Date.MonthName` MUST specify explicit culture (e.g. `"pt-BR"`) to prevent silent relationship breakage across different regional settings
 - If a topic is brittle or repetitive, prefer a dedicated skill over embedding the rule in a generic one.
 
 ## Maintenance Workflow

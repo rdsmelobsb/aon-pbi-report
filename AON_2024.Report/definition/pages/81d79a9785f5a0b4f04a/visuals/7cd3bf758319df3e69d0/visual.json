@@ -43,7 +43,7 @@
               },
               "queryRef": "DATA_DIM.Semana",
               "nativeQueryRef": "Semana",
-              "active": false
+              "active": true
             },
             {
               "field": {
@@ -58,7 +58,7 @@
               },
               "queryRef": "DATA_DIM.Período",
               "nativeQueryRef": "Período",
-              "active": true
+              "active": false
             }
           ]
         },

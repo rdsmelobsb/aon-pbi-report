@@ -90,12 +90,12 @@
                       "Entity": "REDES_MEDIDAS"
                     }
                   },
-                  "Property": "rd_custo"
+                  "Property": "rd_CPM"
                 }
               },
-              "queryRef": "REDES_MEDIDAS.rd_custo",
-              "nativeQueryRef": "Investimento",
-              "displayName": "Investimento"
+              "queryRef": "REDES_MEDIDAS.rd_CPM",
+              "nativeQueryRef": "CPM",
+              "displayName": "CPM"
             }
           ],
           "fieldParameters": [

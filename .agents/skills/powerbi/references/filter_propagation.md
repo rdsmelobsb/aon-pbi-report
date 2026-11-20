@@ -57,3 +57,4 @@ Use this when wiring page-to-page filtering behavior in Power BI reports, especi
 - New slicer with the wrong group name: the filter does not sync.
 - Same group name with a different field: behavior becomes inconsistent or undefined.
 - Measure or column rename in the model without JSON updates: visuals and drillthrough bindings break.
+- Persisted restrictive slicer range on synced groups (`syncGroup`): if a slicer is saved with a hardcoded `startDate` or `endDate` in `visual.json`, it forces that narrow window upon report load across all synced pages. If dimension attributes are unpopulated for that specific time window (e.g. planned attributes still empty in a future month), pages filtered by those attributes will appear completely empty while unfiltered overview pages continue showing raw fact totals.

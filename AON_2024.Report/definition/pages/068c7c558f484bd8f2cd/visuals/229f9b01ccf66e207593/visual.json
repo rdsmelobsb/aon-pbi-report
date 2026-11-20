@@ -378,7 +378,7 @@
                           [
                             {
                               "Literal": {
-                                "Value": "'''REDES_MEDIDAS''[rd_custo]'"
+                                "Value": "'''REDES_MEDIDAS''[rd_CPM]'"
                               }
                             }
                           ]

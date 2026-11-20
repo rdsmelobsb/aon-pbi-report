@@ -220,18 +220,13 @@
         "sort": [
           {
             "field": {
-              "Aggregation": {
+              "Measure": {
                 "Expression": {
-                  "Column": {
-                    "Expression": {
-                      "SourceRef": {
-                        "Entity": "REDES_FATO"
-                      }
-                    },
-                    "Property": "Cost"
+                  "SourceRef": {
+                    "Entity": "REDES_MEDIDAS"
                   }
                 },
-                "Function": 0
+                "Property": "rd_video100"
               }
             },
             "direction": "Descending"
