@@ -33,6 +33,18 @@ For normalizing mixed separators (`_`, `-`, `|`, `(`, `)`), explicit chained `Te
 substituido = Text.Replace(Text.Replace(Text.Replace(Text.Replace(semTracking, "(", " "), ")", " "), "_", " "), "-", " ")
 ```
 
+## Culture-Explicit Date Text Functions
+
+When creating textual date keys (e.g. `Month|Seed` or `Mês/Ano`) used in model relationships, NEVER rely on the default locale of `Date.MonthName`:
+
+```powerquery
+// WRONG - Breaks across different OS regional settings (e.g. "March" vs "Março"):
+Date.MonthName([Date])
+
+// CORRECT - Deterministic across all environments and gateways:
+Date.MonthName([Date], "pt-BR")
+```
+
 ## Dimension Cleansing & Foreign Key Integrity
 
 When transforming noisy dimension keys for executive display:

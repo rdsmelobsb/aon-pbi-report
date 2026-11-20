@@ -93,8 +93,8 @@ O projeto integra nativamente o catálogo oficial com **28 skills e agentes do M
 ### Passos
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/<SEU-USUARIO>/<SEU-REPOSITORIO>.git
-   cd <SEU-REPOSITORIO>
+   git clone https://github.com/rdsmelobsb/aon-pbi-report.git
+   cd aon-pbi-report
    ```
 2. Abra o arquivo executável do projeto:
    - Dê um duplo clique em **`AON_2024.pbip`**
